@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: builds-landing-when-told-to-choose
+expected_outcome: |
+  Picks one direction without a proposal board, rewrites the landing page with hero, how-it-works and pricing sections built from config, adds motion that respects reduced motion and server rendering, and adds no dependencies.
+context:
+  scaffold_script: place-files.sh

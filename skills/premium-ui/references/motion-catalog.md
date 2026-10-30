@@ -60,8 +60,11 @@ Set `transitionDelay = i * 120ms` per line when the heading enters.
 
 ## Count-up (number ticker)
 
-For prices, stats, savings, results of a calculation. Count from the previous
-value, not from 0, when a control changes.
+For prices, stats, savings, results of a calculation. Count from the value
+currently on screen, not from 0 and not from the last target: if the user
+toggles again mid-count, the next count must start where the number is now
+(track the displayed value in the step function, and cancel the previous
+frame before starting).
 
 ```js
 const fmt = new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 });
@@ -125,8 +128,16 @@ function progress(section) {
 }
 // on scroll (rAF-batched): index = floor(p * n); sub = p * n - index
 // track.style.transform = `translateX(${-index * 100}%)`;  // screens side by side
-// active step: expand its text (grid-template-rows 0fr → 1fr), fill its bar by `sub`
+// active step: fade its text in (opacity + translateY), fill its bar by `sub` (scaleX)
 ```
+- Step texts keep their space: render every step's body at full height and
+  switch the active one with opacity/transform only. Don't expand bodies with
+  `grid-template-rows: 0fr → 1fr`, `max-height` or `height` — those animate
+  layout every frame and break the motion rule. Progress bars are
+  `transform: scaleX(sub)` with `transform-origin: left`, not `width`.
+- Without JS the section must still read as a normal list: put the sticky
+  frame, the dimmed inactive screens and the hidden step bodies under
+  `.armed` (added by JS), so the no-JS page shows every step stacked.
 - Screens: a flex track of `flex: 0 0 100%` panels; inactive ones `opacity:.2; scale(.9); blur(3px)`.
 - Give the grid column with the track `min-width: 0`, or the track's width
   blows out the grid.
@@ -173,8 +184,11 @@ recompute on resize and after `document.fonts.ready`.
 
 ## Segmented control
 
-Pill group with a dark thumb that slides under `aria-pressed="true"`
-(`transform: translateX(btn.offsetLeft - pad)`, `width: btn.offsetWidth`).
+Pill group with a dark thumb that slides under `aria-pressed="true"`:
+`transform: translateX(btn.offsetLeft - pad)`. If options differ in width,
+size the thumb with `scaleX` from a fixed base width (and counter-scale its
+content), or make the options equal width — transitioning `width` is a layout
+animation.
 
 ## Interactive calculator / plan finder
 

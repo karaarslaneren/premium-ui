@@ -1,6 +1,6 @@
 ---
 name: premium-ui
-description: Designs premium, product-specific interfaces with purposeful motion — landing pages AND app panels/dashboards/admin screens. First studies the project and proposes 2–3 design directions as live mini-designs plus concrete improvement suggestions, then builds the chosen one. Use when the user asks for a "premium", "profesyonel", "animasyonlu", "şık", "modern" design, a landing/tanıtım sayfası, a dashboard or panel redesign, or points at a reference site and says "bu tarzda" / "like this". Covers concept, theme tokens, motion catalog (scroll reveal, line mask, count-up, SVG flow, scroll-pinned story, magnetic, glow, plan finder, carousels), panel shell patterns, and a browser verification loop.
+description: Designs premium, product-specific interfaces with purposeful motion — landing pages AND app panels/dashboards/admin screens — inside an existing project. First studies the codebase (product, real prices/limits, stack) and proposes 2–3 design directions as live mini-designs plus concrete improvement suggestions, then builds the chosen one and audits it in a browser. Use whenever the user wants a whole page, section set or panel to look and move better — "premium", "profesyonel", "animasyonlu", "şık", "modern", "yeniden tasarla", a landing/tanıtım sayfası, a dashboard or panel redesign — or points at a reference site and says "bu tarzda" / "like this", even if they don't say "design". Do NOT use it for a single small tweak (one button colour, one spacing fix, a typo), pure backend work, generating images/logos/brand kits, slide decks, or charts on their own — handle those directly or with the matching skill.
 ---
 
 # Premium UI
@@ -52,7 +52,9 @@ of these truths. If you cannot name the truth an animation shows, cut it.
 
 Also find the real numbers: prices, plan limits, schedule intervals, supported
 integrations and their status. **Never invent figures, testimonials, customer
-counts or "live" claims.** Read them from config/DB, or leave them out.
+counts or "live" claims** — and that includes offers hidden in button copy:
+"Ücretsiz başla", "14 gün ücretsiz dene", "kredi kartı gerekmez", "%20
+indirim" only if the config or the user says so. Read them from config/DB, or leave them out.
 
 ### 2. Handle the reference correctly
 
@@ -108,10 +110,17 @@ is about that section only — redo it, keep what they liked.
 
 ### 5. Motion rules
 
-- Animate only `transform`, `opacity`, `filter`, stroke-dash. Never layout properties.
+- Animate only `transform`, `opacity`, `filter`, stroke-dash. Never layout
+  properties — that includes the easy-to-miss ones: `grid-template-rows`
+  (0fr → 1fr accordions), `max-height`, `width` on progress bars and slider
+  thumbs. Before you tell the user "only transform/opacity", grep your CSS
+  transitions/keyframes and JS style writes for them; `verify.js` also lists
+  them under `layoutAnimations`.
 - Reveal content only after JS confirms it can reveal it again (add an
   `armed` class from JS; hidden state lives under that class). A failed
-  script must never leave a blank page.
+  script must never leave a blank page. This covers *every* JS-driven hiding,
+  not just scroll reveals: inactive carousel slides, collapsed story steps,
+  dimmed screens — without JS they all show.
 - Honour `prefers-reduced-motion`: disable loops and reveals, keep content.
   Loops that wait with `setTimeout` must still use a real delay under
   reduced motion, or they spin.
@@ -131,8 +140,11 @@ After each section: load it in the browser at desktop (1440×900) and mobile
   horizontal overflow, hit areas, text contrast, focus styles, infinite
   animations / missing reduced-motion support, animated layout properties,
   image alt/size, lazy hero images, font-display and document basics.
-  Fix every `fail`; fix or justify every `warn`. If the browser can emulate
-  `prefers-reduced-motion`, run it once more with it on — infinite loops must be 0.
+  Fix every `fail`; fix or justify every `warn`; `unverified` means a
+  cross-origin stylesheet hid the rules from the script, so check that item by
+  hand. The tab must be in front (a hidden tab returns an `error`). If the
+  browser can emulate `prefers-reduced-motion`, run it once more with it on —
+  infinite loops must be 0.
 - Press Tab through the new section once: focus is visible and in order.
 - Screenshots after animations settle (reveals are mid-transition right after
   scroll — wait or force the revealed class before judging).
@@ -143,3 +155,13 @@ After each section: load it in the browser at desktop (1440×900) and mobile
   matching, dashboard queries scoped to the tenant/user).
 
 Report what you checked and what you could not (e.g. "no local user to log in").
+
+### 7. Keep the pitfalls list growing
+
+`pitfalls.md` is made of mistakes that really happened. When this session
+fixed a bug that the user had to point out, or one that cost more than one
+attempt, and it isn't in `pitfalls.md` or the stack file yet, end your report
+with a proposed row (Symptom | Cause | Fix) and the file it belongs in. Add it
+only if the user agrees and the skill files are writable (they usually are
+when the skill lives in the user's own repo; a plugin cache is overwritten on
+update).

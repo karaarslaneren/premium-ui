@@ -1,0 +1,22 @@
+[
+  {"query": "bu laravel projesinin tanıtım sayfası çok amatör duruyor, stripe.com gibi animasyonlu premium bir landing istiyorum ama birebir kopya olmasın", "should_trigger": true},
+  {"query": "Our Next.js SaaS (app/ router, shadcn) has a dashboard that's just three grey placeholder boxes. Can you redesign the whole admin panel so it feels like Linear — real stats, nicer shell, subtle motion?", "should_trigger": true},
+  {"query": "https://www.framer.com/ bu tarzda bir giriş sayfası yap bizim kargo takip ürünümüz için, fiyatlar config/plans.ts'te", "should_trigger": true},
+  {"query": "panel çok sıkıcı, profesyonel ve şık görünsün istiyorum. sidebar, dashboard, liste sayfaları hepsi. flux kullanıyoruz", "should_trigger": true},
+  {"query": "can you make our pricing + how-it-works sections on the marketing site animated? like scroll-pinned steps and a plan finder slider. vue 3 + nuxt", "should_trigger": true},
+  {"query": "sitemizi baştan yeniden tasarla, modern olsun. önce bana birkaç farklı tasarım yönü göster sonra seçtiğimi yaparsın", "should_trigger": true},
+  {"query": "I need a landing page for my open source CLI tool in this repo (README explains it). Make it look premium, dark, technical — but don't invent download numbers", "should_trigger": true},
+  {"query": "müşteri paneli ve admin paneli aynı görünüyor, ayırt edilsin ve ikisi de daha toparlı dursun; ayrıca auth ekranları çok default", "should_trigger": true},
+  {"query": "hero section'a ürünün ne yaptığını anlatan bir animasyon istiyorum: sipariş pazaryerinden gelip bizim motordan geçip mağazaya düşsün. sayfanın geri kalanı da buna uysun", "should_trigger": true},
+  {"query": "dashboard'daki kaydet butonu çok soluk duruyor, onu teal yap sadece", "should_trigger": false},
+  {"query": "settings sayfasındaki form inputları arasında boşluk çok az, gap-2 yi gap-4 yap", "should_trigger": false},
+  {"query": "can you build me a bar chart of monthly revenue from sales.csv in a quick html file, nothing fancy", "should_trigger": false},
+  {"query": "yatırımcı sunumu için 10 slaytlık premium görünümlü bir pitch deck hazırla", "should_trigger": false},
+  {"query": "we need a logo and brand colors for our new startup Kargonet, give me 3 logo concepts as images", "should_trigger": false},
+  {"query": "the dashboard query is slow, orders page takes 4s to load — can you add an index and eager load the relations", "should_trigger": false},
+  {"query": "landing page'deki 'Get started' yazısını 'Hemen başla' yap, başka bir şeye dokunma", "should_trigger": false},
+  {"query": "explain how framer motion's layoutId works, I want to understand shared layout animations conceptually", "should_trigger": false},
+  {"query": "convert this figma export (design.png) into a single html component exactly as drawn, pixel perfect", "should_trigger": false},
+  {"query": "React Native uygulamamızın onboarding ekranlarına lottie animasyonu ekle", "should_trigger": false},
+  {"query": "write the copy for our landing page hero and features in Turkish — I'll do the design myself", "should_trigger": false}
+]

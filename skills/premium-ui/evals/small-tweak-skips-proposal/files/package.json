@@ -1,0 +1,11 @@
+{
+  "name": "kargonet",
+  "private": true,
+  "scripts": { "dev": "next dev", "build": "next build", "test": "vitest run" },
+  "dependencies": {
+    "next": "14.2.15", "react": "18.3.1", "react-dom": "18.3.1",
+    "@radix-ui/react-slot": "1.1.0", "class-variance-authority": "0.7.0",
+    "clsx": "2.1.1", "tailwind-merge": "2.5.2", "lucide-react": "0.451.0"
+  },
+  "devDependencies": { "tailwindcss": "3.4.13", "typescript": "5.6.2", "vitest": "2.1.2" }
+}

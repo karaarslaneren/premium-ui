@@ -50,6 +50,10 @@ in dark mode use a lighter surface instead of a shadow.
   (`aria-label` with the final number, or animate a decorative copy with
   `aria-hidden`). Status that updates live: `aria-live="polite"`. Decorative
   SVG flows: `aria-hidden="true"`.
+- **Visually hidden ≠ hidden**: states hidden with `opacity: 0` (inactive
+  status pills, non-active story screens, a pending SMS card) are still read
+  aloud. Give them `aria-hidden="true"` — or `inert` if they contain
+  controls — and remove it when they become the visible state.
 - **Carousels**: arrows are buttons with labels ("Önceki", "Sonraki"); slides
   are reachable by keyboard; nothing auto-advances without a pause control.
 - **Images**: meaningful ones have alt text describing the content;

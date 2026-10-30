@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: proposes-directions-before-building
+expected_outcome: |
+  Studies the project, then shows a proposal board with 2-3 distinct directions (palette, type, mini hero, mini panel) and a list of concrete improvements for this project, using only real figures from config, and asks the user to pick before changing any page.
+context:
+  scaffold_script: place-files.sh

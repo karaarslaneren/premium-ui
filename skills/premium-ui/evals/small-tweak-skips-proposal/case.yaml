@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: small-tweak-skips-proposal
+expected_outcome: |
+  Makes the Kaydet button teal with readable contrast and touches nothing else: no proposal board, no redesign.
+context:
+  scaffold_script: place-files.sh

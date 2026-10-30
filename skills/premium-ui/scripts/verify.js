@@ -9,6 +9,9 @@
 // document basics. Heuristic: focus styles (confirm with the Tab key).
 (() => {
   const MAX = 12; // items listed per check
+  if (!innerWidth || !innerHeight || document.visibilityState === 'hidden') {
+    return { error: `page is not visible (viewport ${innerWidth}×${innerHeight}, ${document.visibilityState}): bring the tab to the front and run again` };
+  }
   const vw = document.documentElement.clientWidth;
   const report = { url: location.href, viewport: `${innerWidth}×${innerHeight}`, reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches, checks: {} };
 
@@ -77,54 +80,107 @@
       `scrollWidth ${document.documentElement.scrollWidth} vs viewport ${vw}`);
   }
 
-  // 2. Hit areas ≥ 22px (inline links inside running text are exempt)
+  // 2. Hit areas ≥ 22px. Exempt (as in WCAG 2.5.8): inline links inside running
+  // text, and small targets with enough free space — a 22×22 box centred on
+  // the target touches no other target.
   const focusables = [...document.querySelectorAll('a[href], button, input:not([type=hidden]), select, textarea, summary, [role=button], [role=tab], [role=switch], [tabindex]:not([tabindex="-1"])')]
     .filter((el) => visible(el) && !el.disabled);
   {
-    const items = [];
-    for (const el of focusables) {
-      const r = el.getBoundingClientRect();
+    const items = [], roomy = [];
+    const rects = focusables.map((el) => [el, el.getBoundingClientRect()]);
+    const spaced = (el, r) => {
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const box = { left: Math.min(r.left, cx - 11), right: Math.max(r.right, cx + 11), top: Math.min(r.top, cy - 11), bottom: Math.max(r.bottom, cy + 11) };
+      return !rects.some(([o, q]) => o !== el && !o.contains(el) && !el.contains(o) && q.left < box.right && q.right > box.left && q.top < box.bottom && q.bottom > box.top);
+    };
+    for (const [el, r] of rects) {
       if (Math.min(r.width, r.height) >= 22) continue;
       if (el.tagName === 'A' && getComputedStyle(el).display === 'inline' && (el.parentElement?.innerText || '').length > (el.innerText || '').length + 10) continue;
       if (el.type === 'checkbox' || el.type === 'radio') { const label = el.closest('label') || (el.id && document.querySelector(`label[for="${el.id}"]`)); if (label && Math.min(label.getBoundingClientRect().height, 99) >= 22) continue; }
-      items.push(`${sel(el)} ${Math.round(r.width)}×${Math.round(r.height)}`);
+      (spaced(el, r) ? roomy : items).push(`${sel(el)} ${Math.round(r.width)}×${Math.round(r.height)}`);
     }
-    add('hitAreas', items.length ? 'fail' : 'pass', items, 'interactive targets need ≥ 22×22px');
+    add('hitAreas', items.length ? 'fail' : 'pass', items, 'targets under 22×22px that crowd other targets');
+    add('smallTargets', roomy.length ? 'warn' : 'pass', roomy, 'under 22×22px but with free space around (allowed by WCAG 2.5.8); enlarge controls you own, e.g. with padding');
   }
+
+  // Stylesheets we cannot read (cross-origin) make the CSS-based checks below uncertain.
+  const sheets = [...document.styleSheets].map((s) => { try { return s.cssRules; } catch { return null; } });
+  const unreadable = sheets.filter((s) => !s).length;
+  const walkRules = (fn) => { const walk = (list) => { for (const r of list) { fn(r); if (r.cssRules) walk(r.cssRules); } }; sheets.forEach((s) => s && walk(s)); };
 
   // 3. Text contrast (WCAG AA: 4.5, large text 3)
   {
     const items = []; let checked = 0, skipped = 0;
     const effectiveOpacity = (el) => { let o = 1; for (let p = el; p && p.nodeType === 1; p = p.parentElement) o *= +getComputedStyle(p).opacity; return o; };
+    const MEDIA = new Set(['CANVAS', 'VIDEO', 'IMG', 'IFRAME', 'svg', 'PICTURE']);
+    // Layers painted behind the text: what is really under its centre when it is
+    // on screen (catches absolutely positioned backgrounds that aren't ancestors),
+    // otherwise its ancestors. null = can't judge (image, gradient, media, unknown).
     const background = (el) => {
-      let color = { r: 0, g: 0, b: 0, a: 0 };
-      const layers = [];
-      for (let p = el; p && p.nodeType === 1; p = p.parentElement) {
-        const cs = getComputedStyle(p);
-        if (cs.backgroundImage !== 'none') return null; // gradient / image: cannot judge
-        const c = rgba(cs.backgroundColor);
-        if (c.a > 0) { layers.push(c); if (c.a >= 1) break; }
+      const r = el.getBoundingClientRect();
+      const cx = r.left + Math.min(r.width / 2, 12), cy = r.top + r.height / 2;
+      const onScreen = cx >= 0 && cy >= 0 && cx < innerWidth && cy < innerHeight;
+      let stack = [];
+      if (onScreen) {
+        const all = document.elementsFromPoint(cx, cy); const i = all.indexOf(el);
+        // Covered by another layer with its own text or an opaque fill (e.g. a duplicate
+        // heading used for an effect): what the reader sees isn't this element.
+        const hasText = (p) => [...p.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+        if (all.slice(0, Math.max(i, 0)).some((p) => !el.contains(p) && (hasText(p) || rgba(getComputedStyle(p).backgroundColor).a >= 1))) return null;
+        stack = i >= 0 ? all.slice(i) : [];
       }
-      layers.push({ r: 255, g: 255, b: 255, a: 1 }); // canvas default
-      for (let i = layers.length - 1; i >= 0; i--) color = i === layers.length - 1 ? layers[i] : over(layers[i], color);
+      if (!stack.length) for (let p = el; p && p.nodeType === 1; p = p.parentElement) stack.push(p);
+      const layers = []; let opaque = false;
+      for (const p of stack) {
+        if (p !== el && MEDIA.has(p.tagName)) return null;
+        const cs = getComputedStyle(p);
+        if (cs.backgroundImage !== 'none') return null;
+        const c = rgba(cs.backgroundColor);
+        if (c.a > 0) { layers.push(c); if (c.a >= 1) { opaque = true; break; } }
+      }
+      if (!opaque) {
+        if (!onScreen) return null; // off-screen with no opaque ancestor: something else may paint it
+        layers.push({ r: 255, g: 255, b: 255, a: 1 }); // canvas default
+      }
+      let color = layers[layers.length - 1];
+      for (let i = layers.length - 2; i >= 0; i--) color = over(layers[i], color);
       return color;
     };
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: (n) => n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
-    const els = new Set();
-    while (walker.nextNode()) els.add(walker.currentNode.parentElement);
-    for (const el of els) {
-      if (!visible(el) || el.closest('[aria-hidden="true"], script, style, noscript, svg')) continue;
-      if (effectiveOpacity(el) < 0.99) { skipped++; continue; } // mid-reveal or decorative
+    // Text whose colour isn't what gets painted: gradient text, blend modes.
+    const unmeasurable = (el) => {
+      for (let p = el; p && p.nodeType === 1; p = p.parentElement) {
+        const cs = getComputedStyle(p);
+        if (cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text' || cs.mixBlendMode !== 'normal') return true;
+      }
+      return rgba(getComputedStyle(el).webkitTextFillColor || 'black').a === 0;
+    };
+    const measure = (el) => {
       const bg = background(el);
-      if (!bg) { skipped++; continue; }
+      if (!bg) return null;
       const cs = getComputedStyle(el);
       const fg = over(rgba(cs.color), bg);
       const size = parseFloat(cs.fontSize), bold = +cs.fontWeight >= 700;
       const need = size >= 24 || (bold && size >= 18.66) ? 3 : 4.5;
-      const r = ratio(fg, bg); checked++;
-      if (r < need) items.push(`${sel(el)} ${r.toFixed(2)}:1 (need ${need}) ${cs.color} on rgb(${Math.round(bg.r)} ${Math.round(bg.g)} ${Math.round(bg.b)})`);
+      return { r: ratio(fg, bg), need, text: `${cs.color} on rgb(${Math.round(bg.r)} ${Math.round(bg.g)} ${Math.round(bg.b)})` };
+    };
+    const offScreen = (el) => { const r = el.getBoundingClientRect(); return r.bottom < 0 || r.top > innerHeight; };
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: (n) => n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    const els = new Set();
+    while (walker.nextNode()) els.add(walker.currentNode.parentElement);
+    const sx = scrollX, sy = scrollY;
+    for (const el of els) {
+      if (!visible(el) || el.closest('[aria-hidden="true"], script, style, noscript, svg')) continue;
+      if (effectiveOpacity(el) < 0.99 || unmeasurable(el)) { skipped++; continue; } // mid-reveal, decorative, gradient/blended text
+      let m = measure(el);
+      // An off-screen failure may only look like one because whatever paints its
+      // background isn't an ancestor: scroll it into view and measure what's really behind it.
+      if (m && m.r < m.need && offScreen(el)) { el.scrollIntoView({ block: 'center', behavior: 'instant' }); m = measure(el); }
+      if (!m) { skipped++; continue; }
+      checked++;
+      if (m.r < m.need) items.push(`${sel(el)} ${m.r.toFixed(2)}:1 (need ${m.need}) ${m.text}`);
     }
-    add('contrast', items.length ? 'fail' : 'pass', items, `${checked} text elements checked, ${skipped} skipped (gradient/image background or opacity < 1 — check those by eye)`);
+    scrollTo({ left: sx, top: sy, behavior: 'instant' });
+    add('contrast', items.length ? 'fail' : 'pass', items, `${checked} text elements checked, ${skipped} skipped (image/gradient/media behind, gradient text, opacity < 1, or off-screen with an unknown background — scroll and re-run, and check those by eye)`);
   }
 
   // 4. Focus styles (heuristic: programmatic focus may not trigger :focus-visible everywhere)
@@ -134,8 +190,7 @@
     // Selectors of authored :focus / :focus-visible rules, with the pseudo-class stripped,
     // so an element that has such a rule counts even if programmatic focus doesn't apply it.
     const focusSelectors = [];
-    const collect = (list) => { for (const r of list) { if (r.selectorText?.includes(':focus')) r.selectorText.split(',').filter((s) => s.includes(':focus')).forEach((s) => focusSelectors.push(s.replace(/:focus(-visible|-within)?/g, '').trim() || '*')); if (r.cssRules) collect(r.cssRules); } };
-    for (const s of document.styleSheets) { try { collect(s.cssRules); } catch { /* cross-origin */ } }
+    walkRules((r) => { if (r.selectorText?.includes(':focus')) r.selectorText.split(',').filter((s) => s.includes(':focus')).forEach((s) => focusSelectors.push(s.replace(/:focus(-visible|-within)?/g, '').trim() || '*')); });
     const hasRule = (el) => focusSelectors.some((s) => { try { return el.matches(s); } catch { return false; } });
     for (const el of focusables.slice(0, 40)) {
       const before = snap(el);
@@ -144,27 +199,30 @@
     }
     prev?.focus?.({ preventScroll: true });
     if (prev === document.body) document.activeElement?.blur?.();
-    add('focusStyles', items.length ? 'warn' : 'pass', items, 'no visible change on focus — confirm by pressing Tab in a real browser');
+    add('focusStyles', items.length ? (unreadable ? 'unverified' : 'warn') : 'pass', items,
+      `no visible change on programmatic focus${unreadable ? ` (${unreadable} cross-origin stylesheets unreadable, so their :focus-visible rules could not be seen)` : ''} — confirm by pressing Tab in a real browser`);
   }
 
   // 5. Motion: infinite loops, reduced-motion support, animated layout properties
   {
-    const rules = { reduced: false, unreadable: 0 };
-    const walk = (list) => { for (const r of list) { if (r.media && /prefers-reduced-motion/.test(r.media.mediaText)) rules.reduced = true; if (r.cssRules) walk(r.cssRules); } };
-    for (const s of document.styleSheets) { try { walk(s.cssRules); } catch { rules.unreadable++; } }
+    let reducedRule = false;
+    walkRules((r) => { if (r.media && /prefers-reduced-motion/.test(r.media.mediaText)) reducedRule = true; });
     const anims = document.getAnimations().filter((a) => a.playState === 'running');
     const loops = anims.filter((a) => a.effect?.getTiming().iterations === Infinity);
-    const ok = new Set(['offset', 'composite', 'easing', 'computedOffset', 'transform', 'opacity', 'filter', 'translate', 'scale', 'rotate', 'offsetDistance', 'offsetRotate', 'strokeDashoffset', 'strokeDasharray', 'clipPath', 'color', 'backgroundColor', 'borderColor', 'fill', 'stroke', 'boxShadow', 'visibility', 'backgroundPosition']);
+    // Composited or paint-only properties; anything else (width, height, top, margin, max-height…) causes layout.
+    const ok = new Set(['offset', 'composite', 'easing', 'computedOffset', 'transform', 'opacity', 'filter', 'backdropFilter', 'translate', 'scale', 'rotate', 'offsetDistance', 'offsetRotate', 'strokeDashoffset', 'strokeDasharray', 'clipPath', 'fill', 'stroke', 'boxShadow', 'textShadow', 'visibility', 'backgroundPosition', 'backgroundImage', 'maskPosition']);
+    const paintOnly = (k) => ok.has(k) || /Color$/.test(k) || k === 'color' || k === 'all';
     const layout = [];
     for (const a of anims) {
       const keys = new Set((a.effect?.getKeyframes?.() || []).flatMap(Object.keys));
       if (a.transitionProperty) keys.add(a.transitionProperty.replace(/-([a-z])/g, (_, c) => c.toUpperCase()));
-      const bad = [...keys].filter((k) => !ok.has(k));
+      const bad = [...keys].filter((k) => !paintOnly(k));
       if (bad.length) layout.push(`${sel(a.effect?.target)} animates ${bad.join(', ')}`);
     }
-    add('reducedMotion', report.reducedMotion && loops.length ? 'fail' : (!rules.reduced && anims.length ? 'warn' : 'pass'),
+    const noRule = !reducedRule && anims.length;
+    add('reducedMotion', report.reducedMotion && loops.length ? 'fail' : (noRule ? (unreadable ? 'unverified' : 'warn') : 'pass'),
       loops.map((a) => `${sel(a.effect?.target)} ${a.animationName || a.transitionProperty || 'WAAPI'} (infinite)`),
-      `${rules.reduced ? 'has' : 'NO'} prefers-reduced-motion rule${rules.unreadable ? ` (${rules.unreadable} cross-origin sheets unreadable)` : ''}; ${anims.length} running animations, ${loops.length} infinite. Re-run with reduced motion emulated: infinite loops must be 0.`);
+      `${reducedRule ? 'has' : 'no readable'} prefers-reduced-motion rule${unreadable ? ` (${unreadable} cross-origin stylesheets unreadable)` : ''}; ${anims.length} running animations, ${loops.length} infinite. Re-run with reduced motion emulated: infinite loops must be 0.`);
     add('layoutAnimations', layout.length ? 'warn' : 'pass', layout, 'animate transform/opacity/filter/stroke-dash only');
   }
 
@@ -191,6 +249,6 @@
   }
 
   const statuses = Object.values(report.checks).map((c) => c.status);
-  report.summary = { fail: statuses.filter((s) => s === 'fail').length, warn: statuses.filter((s) => s === 'warn').length, pass: statuses.filter((s) => s === 'pass').length };
+  report.summary = Object.fromEntries(['fail', 'warn', 'unverified', 'pass'].map((k) => [k, statuses.filter((s) => s === k).length]));
   return report;
 })();

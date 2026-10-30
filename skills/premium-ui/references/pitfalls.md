@@ -22,5 +22,7 @@ Stack-agnostic ones. Framework-specific pitfalls are at the end of each
 | Inline `transform` on `<em>` does nothing | Transforms don't apply to inline elements | `inline-block` |
 | Function from another block undefined | Helper declared inside an `if` block of a different feature | Keep helpers top-level in the script or inline them |
 | Counters/odometers jump from 0 on every change | count-up always starts at 0 | Start from the previous value |
+| Report says "only transform/opacity" but the story section stutters | Step bodies expanded with `grid-template-rows: 0fr → 1fr` / `max-height`; progress bar or slider thumb animates `width` | Fade bodies with opacity/transform at full height; bars use `scaleX`; grep before claiming |
+| Without JS only step 1 of "how it works" is readable | Inactive steps hidden by server CSS (`opacity: 0`, `hidden` on mobile), not under `.armed` | Put every JS-driven hidden state under `.armed`; no-JS shows the steps stacked |
 | Animations dead after an in-app navigation | Init ran once on page load; SPA navigation swapped the DOM | Re-init on the router's navigation event, idempotently |
 | `verify.js` reports low contrast on muted text | `--muted` picked by eye on one background | Check muted text on *both* background and raised surface, light and dark |

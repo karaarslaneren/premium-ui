@@ -15,6 +15,12 @@ Bir projede çalıştırınca hemen kod yazmaz:
    oluşuyor → gerçek verili genel bakış" gibi somut öneriler.
 4. **Seçtiğiniz yönü uygular** ve her bölümü tarayıcıda masaüstü ve mobilde kontrol eder.
 
+![Öneri panosu örneği: kurgusal bir kargo takip ürünü için üç tasarım yönü](docs/proposal-board.png)
+
+*Skill'in örnek bir Next.js projesi (kurgusal "Kargonet") için ürettiği öneri
+panosu. Her yön kendi paleti, yazı tipi, mini giriş bölümü ve panel kartıyla
+gösteriliyor; rakamlar projenin config dosyalarından geliyor.*
+
 ## Kurulum
 
 Claude Code'da:
