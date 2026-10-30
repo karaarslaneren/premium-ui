@@ -11,11 +11,20 @@ understand what the product does by watching the page move.
 
 Reference files (read the one the task needs, not all):
 
+- `references/proposal-board.md` — how to propose 2–3 directions with live mini-designs before building.
 - `references/motion-catalog.md` — every animation technique, with when to use it and drop-in code.
 - `references/panel-patterns.md` — app shell, dashboard, tables, forms, empty states, theming a component library.
-- `references/pitfalls.md` — mistakes that already happened once; check before shipping.
+- `references/craft-baseline.md` — type/spacing scales, accessibility, performance budget, copy, loading/empty/error states.
+- `references/pitfalls.md` — stack-agnostic mistakes that already happened once; check before shipping.
+- `references/stacks/<stack>.md` — framework-specific recipes and pitfalls. Read **only** the one matching the project:
+  `laravel-livewire.md` (Blade, Livewire, Flux), `react-next.md` (React, Next.js, shadcn/ui), `vue-nuxt.md` (Vue, Nuxt, Inertia + Vue).
+  For anything else (Svelte, Astro, plain HTML…) apply the generic rules.
 - `references/prompt-template.md` — the brief to ask the user for when they give too little.
-- `references/proposal-board.md` — how to propose 2–3 directions with live mini-designs before building.
+
+Bundled files:
+
+- `assets/proposal-board.html` — the proposal board template (step 0).
+- `scripts/verify.js` — the page audit run in step 6.
 
 ## Workflow
 
@@ -30,6 +39,10 @@ user to pick a direction and which improvements to include, then continue.
 Follow `references/proposal-board.md`.
 
 ### 1. Understand the product before designing anything
+
+Detect the stack first (`package.json`, `composer.json`, framework config,
+component library) and read the matching `references/stacks/*.md` file — and
+only that one.
 
 Read the project: README / overview docs, routes, models, config (prices,
 limits, intervals). Write down 3–5 **product truths** — concrete things the
@@ -63,6 +76,12 @@ dark technical; bold brutalist). Then define tokens before any component:
   everywhere, including buttons and inputs.
 - Easing: `--ease: cubic-bezier(.16,1,.3,1)` for reveals,
   `--spring: cubic-bezier(.34,1.56,.64,1)` for things that land/snap.
+- Scales: type, spacing and elevation from `craft-baseline.md` §1 — set them
+  as tokens too, so no component invents its own sizes.
+
+Check the colour pairs against WCAG AA before building (muted text on both
+background and surface, light and dark); fixing a palette later touches
+every screen.
 
 In an existing app with a component library (Flux, shadcn, etc.), theme the
 library centrally (tokens + a few global overrides) instead of editing every
@@ -78,6 +97,10 @@ FAQ carousel → CTA → footer wordmark.
 
 Panel: shell (sidebar on background, page as a raised sheet) → overview
 dashboard with real data → list/detail pages inherit from the theme.
+
+For every component, design its loading, empty, error and limit states and
+write real microcopy for them (`craft-baseline.md` §4–5) — defaults are where
+premium falls apart.
 
 Show the user each meaningful step; ask for feedback on a section rather than
 delivering everything at once. Feedback like "burası daha profesyonel olabilir"
@@ -102,7 +125,15 @@ is about that section only — redo it, keep what they liked.
 After each section: load it in the browser at desktop (1440×900) and mobile
 (375×812). Check:
 
-- `document.documentElement.scrollWidth === innerWidth` (no horizontal overflow).
+- Run `scripts/verify.js` in the page (read the file and pass its contents
+  to the browser tool's JavaScript runner; the result is a JSON report) after
+  animations settle, at both sizes, and in light and dark. It checks
+  horizontal overflow, hit areas, text contrast, focus styles, infinite
+  animations / missing reduced-motion support, animated layout properties,
+  image alt/size, lazy hero images, font-display and document basics.
+  Fix every `fail`; fix or justify every `warn`. If the browser can emulate
+  `prefers-reduced-motion`, run it once more with it on — infinite loops must be 0.
+- Press Tab through the new section once: focus is visible and in order.
 - Screenshots after animations settle (reveals are mid-transition right after
   scroll — wait or force the revealed class before judging).
 - Interactive pieces with **real pointer drags/clicks**, not only by setting

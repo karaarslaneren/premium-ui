@@ -185,9 +185,9 @@ real rules: price after commission, which plan fits, savings per year.
 - Show the reason, not just the answer: "Profesyonel en fazla 6 pazaryeri
   hesabı içeriyor; Kurumsal 10 mağaza ve 20 hesaba kadar yetiyor." Numbers
   in the explanation must visibly add up with the numbers the user picked.
-- With a server framework (Livewire/Inertia), it's fine and often better to
-  compute the answer server-side (`wire:model.live`) and echo slider values
-  client-side (`x-text="$wire.field"`) so dragging feels instant.
+- With a server-driven framework it's fine to compute the answer on the
+  server, as long as the slider value itself is echoed on the client so
+  dragging feels instant (Livewire recipe in `stacks/laravel-livewire.md`).
 - Range input: input height = thumb height, line drawn on the track
   pseudo-element (see pitfalls).
 

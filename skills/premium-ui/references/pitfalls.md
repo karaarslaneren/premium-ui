@@ -1,5 +1,8 @@
 # Pitfalls (each one happened at least once)
 
+Stack-agnostic ones. Framework-specific pitfalls are at the end of each
+`stacks/*.md` file.
+
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | User says "yine çok benzer" after a redesign | Kept the reference's visual language (shapes, mono type, grid, palette), only recoloured it | Start from the product's truths and a new direction; take only motion *quality* from the reference |
@@ -13,10 +16,11 @@
 | Screenshots look faded/blurred | Taken mid-reveal/page-enter | Wait for transitions or force `.in` before judging |
 | "Fixed" code not visible in browser | Navigating to the same URL with only a hash change does not reload | `location.reload()` or add a query string |
 | Test passes, real drag fails | Test set `input.value` via JS | Verify interactions with real pointer events too |
-| Wrong greeting ("İyi geceler" at 9:00) | App timezone UTC | Convert to the user's timezone for display |
+| Wrong greeting ("İyi geceler" at 9:00) | Server/app timezone (UTC) used for display | Convert to the user's timezone for display |
 | "Sync running" shown with nothing connected | Status pill unconditional | Show live/status claims only when the data supports them |
-| Dates/English strings in a Turkish UI | `APP_LOCALE=en`, starter-kit strings untranslated, `#[Title]` not translated | See panel-patterns §5 |
+| Dates/English strings in a localized UI | Framework locale not set, starter-kit strings untranslated | panel-patterns §5 + the stack file |
 | Inline `transform` on `<em>` does nothing | Transforms don't apply to inline elements | `inline-block` |
 | Function from another block undefined | Helper declared inside an `if` block of a different feature | Keep helpers top-level in the script or inline them |
 | Counters/odometers jump from 0 on every change | count-up always starts at 0 | Start from the previous value |
-| Livewire method name fatal (white screen) | Component method clashes with `Livewire\Component` methods (`pull`, `reset`, `only`…) | Use specific names (`pullCatalogue`) |
+| Animations dead after an in-app navigation | Init ran once on page load; SPA navigation swapped the DOM | Re-init on the router's navigation event, idempotently |
+| `verify.js` reports low contrast on muted text | `--muted` picked by eye on one background | Check muted text on *both* background and raised surface, light and dark |

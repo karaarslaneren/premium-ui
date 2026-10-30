@@ -9,39 +9,19 @@ The premium feel comes from the shell, type, and honest, useful content.
 Most panels are built from a component library (Flux, shadcn/ui, Filament,
 MUI...). Do NOT restyle page by page. Instead:
 
-1. **Override the neutral scale** the library paints with. Example (Flux /
-   Tailwind v4 — Flux uses `zinc` for everything):
-   ```css
-   @theme {
-     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-     --font-serif: 'Instrument Serif', Georgia, serif;
-     /* warm paper at the light end, near-black at the dark end */
-     --color-zinc-50: #f7f6f2; --color-zinc-100: #f1efea; --color-zinc-200: #e6e3dc;
-     --color-zinc-300: #d3cfc7; --color-zinc-400: #a3a09a; --color-zinc-500: #73726e;
-     --color-zinc-600: #55565a; --color-zinc-700: #393b40; --color-zinc-800: #202328;
-     --color-zinc-900: #14171c; --color-zinc-950: #0b0d10;
-     --color-paper: #f4f2ec; --color-ink: #0e1013; --color-brand: #0f766e;
-     --color-accent: var(--color-ink);            /* primary buttons */
-     --color-accent-content: var(--color-brand);  /* links, current nav item */
-     --color-accent-foreground: #fff;
-   }
-   @layer theme { .dark { --color-accent: #14b8a6; --color-accent-content: #5eead4; --color-accent-foreground: #0b0d10; } }
-   ```
-2. **Global shape overrides** via the library's data attributes (unlayered so
-   they beat inline utility radii):
-   ```css
-   [data-flux-button]:not([data-flux-button-group] *) { border-radius: 9999px; }
-   input[data-flux-control], textarea[data-flux-control], [data-flux-select-button] { border-radius: .75rem; }
-   [data-flux-callout], [data-flux-card], [data-flux-modal] > dialog { border-radius: 1.25rem; }
-   [data-flux-heading] { letter-spacing: -.02em; }
-   [data-flux-main] [data-flux-heading].text-2xl { font-size: 2.125rem; font-weight: 600; letter-spacing: -.03em; }
-   ```
-3. **Page enter**: `[data-flux-main] > * { animation: page .45s var(--ease) both }`
-   with `from { opacity: 0; transform: translateY(10px) }`. Replays on SPA
-   navigation (wire:navigate / router). Disable under reduced motion.
+1. **Override the tokens the library paints with**: its neutral scale or
+   CSS variables (surfaces, text, border, primary, radius), light and dark.
+2. **Global shape overrides** where tokens can't reach: target the
+   library's stable data attributes or a component variant, not page markup.
+3. **Page enter**: one short animation on the main content
+   (`from { opacity: 0; transform: translateY(10px) }`, .45s `--ease`) that
+   replays on SPA navigation. Disable under reduced motion.
 
 Inspect a rendered element first (`outerHTML`) to find the real data
 attributes and classes before writing overrides.
+
+Library-specific recipes (Flux, shadcn/ui, Nuxt UI, PrimeVue, Vuetify) are in
+`stacks/<your-stack>.md`.
 
 ## 2. App shell: sheet on paper
 
@@ -75,7 +55,7 @@ Build it from real queries, scoped to the current tenant/user:
 6. Empty states that say what will appear and when ("Henüz sipariş gelmedi.
    Pazaryerinden gelen siparişler burada görünecek.").
 7. A user with no tenant/org gets a single onboarding card instead of zeros.
-8. `poll` every 30s if the data moves.
+8. Poll / revalidate every ~30s only the parts whose data moves.
 
 Test: renders for no-tenant user, shows checklist for fresh tenant, shows own
 data and **never another tenant's**.
@@ -95,7 +75,7 @@ data and **never another tenant's**.
 
 If the UI language is not English, make sure the framework's own strings are
 translated too (starter-kit settings pages, validation messages, relative
-dates). In Laravel: `lang/<locale>.json` for `__()` strings, `lang/<locale>/{auth,passwords,validation,pagination}.php`,
-`APP_LOCALE`, and remember attribute-based titles like Livewire `#[Title('...')]`
-are NOT passed through `__()`. Update tests that assert English copy, and
-tell the user the production `.env` needs the locale change too.
+dates, page titles). Format numbers and dates with the user's locale and
+timezone. Update tests that assert English copy, and tell the user if the
+production environment needs a locale setting changed too. Where each
+framework keeps these strings: `stacks/<your-stack>.md`.

@@ -63,8 +63,12 @@ devreye sokar.
 | [`proposal-board.md`](skills/premium-ui/references/proposal-board.md) | Tasarım yönlerini canlı mini tasarımlarla önerme |
 | [`motion-catalog.md`](skills/premium-ui/references/motion-catalog.md) | Animasyon teknikleri ve hazır kodları: scroll reveal, line mask, count-up, SVG akış, sabitlenen bölüm (scroll-pinned), magnetic buton, glow kart, plan önerici, carousel, footer yazısı |
 | [`panel-patterns.md`](skills/premium-ui/references/panel-patterns.md) | Panel çerçevesi, bileşen kütüphanesini merkezden temalama, gerçek verili dashboard, giriş ekranları, dil ayarları |
-| [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış hatalar ve çözümleri |
+| [`craft-baseline.md`](skills/premium-ui/references/craft-baseline.md) | Tip ve boşluk ölçekleri, erişilebilirlik, performans bütçesi, metin (copy), yükleniyor/boş/hata durumları |
+| [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış, stack'ten bağımsız hatalar ve çözümleri |
+| [`stacks/`](skills/premium-ui/references/stacks/) | Stack'e özel tarifler ve hatalar: [Laravel/Livewire/Flux](skills/premium-ui/references/stacks/laravel-livewire.md), [React/Next/shadcn](skills/premium-ui/references/stacks/react-next.md), [Vue/Nuxt](skills/premium-ui/references/stacks/vue-nuxt.md). Skill yalnızca projeye uyanı okur |
 | [`prompt-template.md`](skills/premium-ui/references/prompt-template.md) | Doldurulacak istek şablonu |
+| [`assets/proposal-board.html`](skills/premium-ui/assets/proposal-board.html) | Öneri panosu şablonu: 3 yön, mini giriş bölümü ve panel, CSS animasyonu |
+| [`scripts/verify.js`](skills/premium-ui/scripts/verify.js) | Tarayıcıda çalışan denetim: yatay taşma, tıklama alanı, kontrast, odak, reduced-motion, görsel ve font kontrolleri (JSON rapor) |
 
 ## İlkeler
 
@@ -72,4 +76,5 @@ devreye sokar.
 - Referans site kopyalanmaz; sadece kalitesi örnek alınır.
 - Rakamlar ve iddialar gerçek veriden gelir, uydurulmaz.
 - Yalnızca transform/opacity animasyonu, `prefers-reduced-motion` desteği, mobilde yatay taşma yok.
+- WCAG AA kontrast, görünür odak, klavyeyle kullanım; `verify.js` her bölümde çalıştırılır.
 - Her değişiklik tarayıcıda gerçek etkileşimle kontrol edilir.

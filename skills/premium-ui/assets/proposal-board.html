@@ -1,0 +1,172 @@
+<!doctype html>
+<!--
+  premium-ui proposal board template.
+  Copy to the session scratchpad, then replace every [bracketed] placeholder
+  with the project's real content and each direction's tokens. Keep it one
+  self-contained file: Google Fonts only, no other external assets, CSS-only
+  animations. See references/proposal-board.md.
+-->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tasarım önerileri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ecebe7; --page-ink: #111; --page-muted: #55565a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: var(--page); color: var(--page-ink); }
+  header, .improvements { max-width: 1320px; margin: 0 auto; padding: 32px 24px 0; }
+  header h1 { margin: 0; font-size: 28px; letter-spacing: -.02em; }
+  header p { margin: 4px 0 0; color: var(--page-muted); }
+  .board { max-width: 1320px; margin: 0 auto; display: grid; gap: 20px; padding: 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+
+  /* ---- one direction = one column, painted only with its own tokens ---- */
+  .dir { background: var(--bg); color: var(--ink); border-radius: var(--r); padding: 24px; font-family: var(--ui), system-ui, sans-serif; overflow: hidden; display: flex; flex-direction: column; gap: 18px; border: var(--border, 0); }
+  .dir[data-dir="a"] { --bg:#f4f2ec; --surface:#fff; --ink:#0e1013; --muted:#5e6470; --accent:#0f766e; --event:#c2410c; --line:#0e101322; --r:28px; --btn-r:999px; --ui:'Instrument Sans'; --display:'Instrument Serif'; --display-style: italic; }
+  .dir[data-dir="b"] { --bg:#0b0d10; --surface:#14171c; --ink:#e6eef0; --muted:#98a0ab; --accent:#2dd4bf; --event:#f5b14a; --line:#ffffff1f; --r:8px; --btn-r:6px; --ui:'Space Grotesk'; --display:'JetBrains Mono'; --display-style: normal; }
+  .dir[data-dir="c"] { --bg:#fff7d6; --surface:#fff; --ink:#111; --muted:#3d3d3d; --accent:#1d4ed8; --event:#dc2626; --line:#111; --r:0px; --btn-r:0px; --ui:'Space Grotesk'; --display:'Archivo Black'; --display-style: normal; --border: 3px solid #111; }
+
+  .head strong { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .head h2 { margin: 2px 0 0; font-size: 22px; letter-spacing: -.02em; }
+  .head p { margin: 4px 0 0; color: var(--muted); }
+  .swatches { display: flex; gap: 6px; }
+  .swatches i { width: 28px; height: 28px; border-radius: 50%; outline: 1px solid var(--line); }
+  .type { display: flex; align-items: baseline; gap: 12px; color: var(--muted); font-size: 13px; }
+  .type b { font: var(--display-style) 30px/1 var(--display), serif; color: var(--ink); }
+
+  .hero { background: var(--surface); border-radius: calc(var(--r) * .7); padding: 20px; border: var(--border, 1px solid var(--line)); }
+  .hero h3 { font-size: 32px; line-height: 1.02; letter-spacing: -.03em; margin: 0 0 14px; font-weight: 600; }
+  .hero em { font: var(--display-style) 1.05em/1 var(--display), serif; color: var(--accent); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--btn-r); background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .flow { margin-top: 14px; color: var(--ink); }
+
+  .panel { display: grid; grid-template-columns: 64px 1fr; gap: 10px; }
+  .card { background: var(--surface); border-radius: calc(var(--r) * .6); padding: 14px; border: var(--border, 1px solid var(--line)); min-width: 0; }
+  .side { display: grid; gap: 8px; align-content: start; }
+  .side i { display: block; height: 8px; border-radius: 4px; background: var(--line); }
+  .side i:first-child { background: var(--accent); }
+  .stat small, .row small { color: var(--muted); }
+  .stat b { display: block; font-size: 28px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .row .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--event); flex: none; }
+  .row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .ideas { margin: 0; padding-left: 18px; color: var(--muted); }
+  .ideas b { color: var(--ink); }
+  .fit { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; margin-top: auto; }
+
+  /* ---- signature animation: replace per direction with the product truth it shows ---- */
+  @keyframes travel { from { offset-distance: 0% } to { offset-distance: 100% } }
+  @keyframes draw { from { stroke-dashoffset: 300 } to { stroke-dashoffset: 0 } }
+  .flow .track { stroke-dasharray: 300; animation: draw 1.6s cubic-bezier(.16,1,.3,1) both; }
+  .flow .packet { offset-path: path('M12 40 C 90 40, 110 12, 188 12'); animation: travel 2.4s cubic-bezier(.16,1,.3,1) infinite; }
+  .flow .packet.late { animation-delay: 1.2s; fill: var(--accent); }
+
+  .improvements { padding-bottom: 40px; }
+  .improvements h2 { font-size: 22px; letter-spacing: -.02em; }
+  .improvements li { margin: 6px 0; }
+  .improvements li b { font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>[Proje adı] · tasarım önerileri</h1>
+  <p>[Ürün tek cümlede.] Üç yön, aynı içerikle: giriş bölümü ve panel kartı birlikte.</p>
+</header>
+
+<main class="board">
+  <!-- Direction A: calm editorial -->
+  <section class="dir" data-dir="a" aria-labelledby="a-title">
+    <div class="head"><strong>A</strong><h2 id="a-title">[Ad, ör. Kâğıt &amp; Mürekkep]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
+    <div class="type"><b>Aa</b><span>Instrument Sans + Instrument Serif (vurgu)</span></div>
+    <div class="hero">
+      <h3>[Başlık] <em>[vurgu]</em></h3>
+      <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
+      <svg class="flow" viewBox="0 0 200 52" width="100%" aria-hidden="true"><path class="track" d="M12 40 C 90 40, 110 12, 188 12" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><circle class="packet" r="5" fill="var(--event)"/><circle class="packet late" r="4"/></svg>
+    </div>
+    <div class="panel">
+      <div class="card side" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="card">
+        <div class="stat"><small>[Gerçek bir metrik]</small><b>[sayı]</b></div>
+        <div class="row"><i class="dot"></i><span>[Son kayıt, ör. sipariş #1042]</span><small>[2 dk]</small></div>
+      </div>
+    </div>
+    <ul class="ideas">
+      <li><b>Landing:</b> [hero, bir etkileşimli araç, bir bölüm]</li>
+      <li><b>Panel:</b> [kabuk, dashboard, bir liste/detay]</li>
+      <li><b>İmza animasyonu:</b> [hangi ürün gerçeğini gösteriyor]</li>
+    </ul>
+    <p class="fit">[Kime uyar, maliyeti ne: efor, okunabilirlik.]</p>
+  </section>
+
+  <!-- Direction B: dark technical -->
+  <section class="dir" data-dir="b" aria-labelledby="b-title">
+    <div class="head"><strong>B</strong><h2 id="b-title">[Ad, ör. Kontrol Odası]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
+    <div class="type"><b>Aa</b><span>Space Grotesk + JetBrains Mono (vurgu)</span></div>
+    <div class="hero">
+      <h3>[Başlık] <em>[vurgu]</em></h3>
+      <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
+      <svg class="flow" viewBox="0 0 200 52" width="100%" aria-hidden="true"><path class="track" d="M12 40 C 90 40, 110 12, 188 12" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><circle class="packet" r="5" fill="var(--event)"/><circle class="packet late" r="4"/></svg>
+    </div>
+    <div class="panel">
+      <div class="card side" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="card">
+        <div class="stat"><small>[Gerçek bir metrik]</small><b>[sayı]</b></div>
+        <div class="row"><i class="dot"></i><span>[Son kayıt]</span><small>[2 dk]</small></div>
+      </div>
+    </div>
+    <ul class="ideas">
+      <li><b>Landing:</b> […]</li>
+      <li><b>Panel:</b> […]</li>
+      <li><b>İmza animasyonu:</b> […]</li>
+    </ul>
+    <p class="fit">[Kime uyar, maliyeti ne.]</p>
+  </section>
+
+  <!-- Direction C: bold / expressive -->
+  <section class="dir" data-dir="c" aria-labelledby="c-title">
+    <div class="head"><strong>C</strong><h2 id="c-title">[Ad, ör. Afiş]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
+    <div class="type"><b>Aa</b><span>Space Grotesk + Archivo Black (vurgu)</span></div>
+    <div class="hero">
+      <h3>[Başlık] <em>[vurgu]</em></h3>
+      <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
+      <svg class="flow" viewBox="0 0 200 52" width="100%" aria-hidden="true"><path class="track" d="M12 40 C 90 40, 110 12, 188 12" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="3"/><circle class="packet" r="6" fill="var(--event)"/><circle class="packet late" r="5"/></svg>
+    </div>
+    <div class="panel">
+      <div class="card side" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="card">
+        <div class="stat"><small>[Gerçek bir metrik]</small><b>[sayı]</b></div>
+        <div class="row"><i class="dot"></i><span>[Son kayıt]</span><small>[2 dk]</small></div>
+      </div>
+    </div>
+    <ul class="ideas">
+      <li><b>Landing:</b> […]</li>
+      <li><b>Panel:</b> […]</li>
+      <li><b>İmza animasyonu:</b> […]</li>
+    </ul>
+    <p class="fit">[Kime uyar, maliyeti ne.]</p>
+  </section>
+</main>
+
+<section class="improvements" aria-labelledby="imp-title">
+  <h2 id="imp-title">Bu projede önerdiklerim</h2>
+  <ol>
+    <li><b>[Sorun]</b> → [öneri], ör. Dashboard yer tutucu kutulardan oluşuyor → gerçek verili genel bakış.</li>
+    <li><b>[Sorun]</b> → [öneri]</li>
+    <li><b>[Sorun]</b> → [öneri]</li>
+    <li><b>[Sorun]</b> → [öneri]</li>
+  </ol>
+</section>
+</body>
+</html>
