@@ -1,0 +1,19 @@
+{
+  "name": "premium-ui",
+  "version": "1.0.0",
+  "description": "Premium, ürüne özgü arayüzler ve anlamlı animasyonlar: tanıtım sayfaları ve uygulama panelleri. Önce projeyi inceleyip 2–3 tasarım yönünü canlı mini tasarımlarla önerir, seçileni uygular.",
+  "author": {
+    "name": "karaarslaneren"
+  },
+  "homepage": "https://github.com/karaarslaneren/premium-ui",
+  "repository": "https://github.com/karaarslaneren/premium-ui",
+  "keywords": [
+    "design",
+    "ui",
+    "animation",
+    "landing-page",
+    "dashboard",
+    "tailwind",
+    "livewire"
+  ]
+}

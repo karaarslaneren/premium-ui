@@ -1,0 +1,17 @@
+{
+  "name": "premium-ui",
+  "owner": {
+    "name": "karaarslaneren"
+  },
+  "metadata": {
+    "description": "premium-ui plugin'ini kurmak için marketplace."
+  },
+  "plugins": [
+    {
+      "name": "premium-ui",
+      "source": "./",
+      "description": "Premium tanıtım sayfaları ve panel tasarımları; önce öneri panosu, sonra uygulama.",
+      "version": "1.0.0"
+    }
+  ]
+}
