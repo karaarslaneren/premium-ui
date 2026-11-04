@@ -4,7 +4,11 @@
   Copy to the session scratchpad, then replace every [bracketed] placeholder
   with the project's real content and each direction's tokens. Keep it one
   self-contained file: Google Fonts only, no other external assets, CSS-only
-  animations. See references/proposal-board.md.
+  animations. See references/direction-finding.md and proposal-board.md.
+
+  The grey tokens and system fonts below are a skeleton, NOT a style: write
+  every token block from scratch for its direction, and change the column
+  structure where a direction needs it.
 -->
 <html lang="tr">
 <head>
@@ -13,7 +17,7 @@
 <title>Tasarım önerileri</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
+<!-- [Add one Google Fonts <link> with the faces your three directions use, ending in &display=swap. Check Turkish glyphs: ğ ş ı İ.] -->
 <style>
   :root { --page: #ecebe7; --page-ink: #111; --page-muted: #55565a; }
   * { box-sizing: border-box; }
@@ -25,9 +29,13 @@
 
   /* ---- one direction = one column, painted only with its own tokens ---- */
   .dir { background: var(--bg); color: var(--ink); border-radius: var(--r); padding: 24px; font-family: var(--ui), system-ui, sans-serif; overflow: hidden; display: flex; flex-direction: column; gap: 18px; border: var(--border, 0); }
-  .dir[data-dir="a"] { --bg:#f4f2ec; --surface:#fff; --ink:#0e1013; --muted:#5e6470; --accent:#0f766e; --event:#c2410c; --line:#0e101322; --r:28px; --btn-r:999px; --ui:'Instrument Sans'; --display:'Instrument Serif'; --display-style: italic; }
-  .dir[data-dir="b"] { --bg:#0b0d10; --surface:#14171c; --ink:#e6eef0; --muted:#98a0ab; --accent:#2dd4bf; --event:#f5b14a; --line:#ffffff1f; --r:8px; --btn-r:6px; --ui:'Space Grotesk'; --display:'JetBrains Mono'; --display-style: normal; }
-  .dir[data-dir="c"] { --bg:#fff7d6; --surface:#fff; --ink:#111; --muted:#3d3d3d; --accent:#1d4ed8; --event:#dc2626; --line:#111; --r:0px; --btn-r:0px; --ui:'Space Grotesk'; --display:'Archivo Black'; --display-style: normal; --border: 3px solid #111; }
+  /* REPLACE each block. Placeholder greys only; every value is meant to change.
+     --em-*: the direction's emphasis device (second face, weight, colour, case, highlight…). */
+  .dir { --bg:#f2f2f2; --surface:#fff; --ink:#1a1a1a; --muted:#595959; --accent:#404040; --event:#6b6b6b; --line:#00000024; --r:12px; --btn-r:8px; --ui: system-ui;
+         --em-font: inherit; --em-style: normal; --em-weight: 800; --em-color: var(--accent); --em-transform: none; --em-bg: none; }
+  .dir[data-dir="a"] { /* [direction A tokens] */ }
+  .dir[data-dir="b"] { /* [direction B tokens] */ --bg:#e6e6e6; }
+  .dir[data-dir="c"] { /* [direction C tokens] */ --bg:#dadada; }
 
   .head strong { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .head h2 { margin: 2px 0 0; font-size: 22px; letter-spacing: -.02em; }
@@ -35,11 +43,11 @@
   .swatches { display: flex; gap: 6px; }
   .swatches i { width: 28px; height: 28px; border-radius: 50%; outline: 1px solid var(--line); }
   .type { display: flex; align-items: baseline; gap: 12px; color: var(--muted); font-size: 13px; }
-  .type b { font: var(--display-style) 30px/1 var(--display), serif; color: var(--ink); }
+  .type b { font-size: 30px; line-height: 1; font-family: var(--em-font); font-style: var(--em-style); font-weight: var(--em-weight); color: var(--ink); }
 
   .hero { background: var(--surface); border-radius: calc(var(--r) * .7); padding: 20px; border: var(--border, 1px solid var(--line)); }
   .hero h3 { font-size: 32px; line-height: 1.02; letter-spacing: -.03em; margin: 0 0 14px; font-weight: 600; }
-  .hero em { font: var(--display-style) 1.05em/1 var(--display), serif; color: var(--accent); }
+  .hero em { font-family: var(--em-font); font-style: var(--em-style); font-weight: var(--em-weight); color: var(--em-color); text-transform: var(--em-transform); background: var(--em-bg); }
   .actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .btn { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--btn-r); background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; }
   .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
@@ -83,11 +91,11 @@
 </header>
 
 <main class="board">
-  <!-- Direction A: calm editorial -->
+  <!-- Direction A -->
   <section class="dir" data-dir="a" aria-labelledby="a-title">
-    <div class="head"><strong>A</strong><h2 id="a-title">[Ad, ör. Kâğıt &amp; Mürekkep]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="head"><strong>A</strong><h2 id="a-title">[Ürünün dünyasından bir ad]</h2><p>[Tek cümlelik fikir + neden bu ürün.]</p></div>
     <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
-    <div class="type"><b>Aa</b><span>Instrument Sans + Instrument Serif (vurgu)</span></div>
+    <div class="type"><b>Aa</b><span>[UI fontu] + [vurgu aracı]</span></div>
     <div class="hero">
       <h3>[Başlık] <em>[vurgu]</em></h3>
       <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
@@ -108,11 +116,11 @@
     <p class="fit">[Kime uyar, maliyeti ne: efor, okunabilirlik.]</p>
   </section>
 
-  <!-- Direction B: dark technical -->
+  <!-- Direction B -->
   <section class="dir" data-dir="b" aria-labelledby="b-title">
-    <div class="head"><strong>B</strong><h2 id="b-title">[Ad, ör. Kontrol Odası]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="head"><strong>B</strong><h2 id="b-title">[Ürünün dünyasından bir ad]</h2><p>[Tek cümlelik fikir + neden bu ürün.]</p></div>
     <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
-    <div class="type"><b>Aa</b><span>Space Grotesk + JetBrains Mono (vurgu)</span></div>
+    <div class="type"><b>Aa</b><span>[UI fontu] + [vurgu aracı]</span></div>
     <div class="hero">
       <h3>[Başlık] <em>[vurgu]</em></h3>
       <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
@@ -133,15 +141,15 @@
     <p class="fit">[Kime uyar, maliyeti ne.]</p>
   </section>
 
-  <!-- Direction C: bold / expressive -->
+  <!-- Direction C -->
   <section class="dir" data-dir="c" aria-labelledby="c-title">
-    <div class="head"><strong>C</strong><h2 id="c-title">[Ad, ör. Afiş]</h2><p>[Tek cümlelik fikir.]</p></div>
+    <div class="head"><strong>C</strong><h2 id="c-title">[Ürünün dünyasından bir ad]</h2><p>[Tek cümlelik fikir + neden bu ürün.]</p></div>
     <div class="swatches" aria-label="Palet"><i style="background:var(--bg)"></i><i style="background:var(--surface)"></i><i style="background:var(--ink)"></i><i style="background:var(--accent)"></i><i style="background:var(--event)"></i></div>
-    <div class="type"><b>Aa</b><span>Space Grotesk + Archivo Black (vurgu)</span></div>
+    <div class="type"><b>Aa</b><span>[UI fontu] + [vurgu aracı]</span></div>
     <div class="hero">
       <h3>[Başlık] <em>[vurgu]</em></h3>
       <div class="actions"><a class="btn" href="#">[Ana CTA]</a><a class="btn ghost" href="#">[İkincil]</a></div>
-      <svg class="flow" viewBox="0 0 200 52" width="100%" aria-hidden="true"><path class="track" d="M12 40 C 90 40, 110 12, 188 12" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="3"/><circle class="packet" r="6" fill="var(--event)"/><circle class="packet late" r="5"/></svg>
+      <svg class="flow" viewBox="0 0 200 52" width="100%" aria-hidden="true"><path class="track" d="M12 40 C 90 40, 110 12, 188 12" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><circle class="packet" r="5" fill="var(--event)"/><circle class="packet late" r="4"/></svg>
     </div>
     <div class="panel">
       <div class="card side" aria-hidden="true"><i></i><i></i><i></i><i></i></div>

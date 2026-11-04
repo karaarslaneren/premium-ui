@@ -9,7 +9,7 @@ the code and say what you assumed.
 
 Tasarım yönü:
 - Referans: [link]. Animasyon kalitesini referans al ama kopyalama; bu ürüne özgü olsun.
-- Görünüm: [ör. açık editoryal, kırık beyaz zemin, italik serif vurgu kelimeleri, yuvarlak hap butonlar].
+- Görünüm: [varsa: marka renkleri, logo, beğenilen/beğenilmeyen siteler; yoksa "ürünün dünyasından türet"].
 
 Animasyonlar ürünün kendisini anlatsın, süs olmasın:
 - Hero: [ör. bir ürün pazaryerlerine dağılsın, fiyatlar count-up ile hesaplansın].
@@ -17,8 +17,8 @@ Animasyonlar ürünün kendisini anlatsın, süs olmasın:
 - Nasıl çalışır: scroll-pinned scrollytelling; bölüm sabit kalsın, adımlar yerinde kaysın.
 - Fiyatlar: plan önerici (kaydırıcı → sliding highlight), yıllıkta tasarruf count-up.
 - SSS: yatay scroll-snap carousel. Footer: giant wordmark reveal.
-- Panel: sayfa yükseltilmiş kâğıt gibi, gerçek verili genel bakış, kurulum listesi.
-- Genel: line mask reveal başlıklar, magnetic butonlar, cursor-follow glow kartlar, spring easing.
+- Panel: landing ile aynı tasarım dili, gerçek verili genel bakış, kurulum listesi.
+- Genel: [istenen hareket karakteri, ör. sakin / mekanik / oyuncu].
 
 Kısıtlar:
 - Stack: [ör. Laravel Blade + Tailwind v4 + Livewire + vanilla JS]. Yeni bağımlılık ekleme.

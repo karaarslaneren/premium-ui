@@ -16,17 +16,19 @@ directions** as live mini-designs on one page, and let the user pick.
 
 ## 2. What each direction must contain
 
-Directions must differ in **idea**, not just colour. Good spread: one calm
-editorial, one dark technical, one bold/expressive — adjusted to the product.
+Find the three directions with `direction-finding.md` first: they come from
+the product's world and differ on at least three axes. There is no standard
+spread (no fixed "one editorial, one dark, one bold") — a fixed spread is
+exactly what makes every board look the same.
 
 For each direction:
 
 | Field | Example |
 | --- | --- |
-| Name + one-line idea | "Kâğıt & Mürekkep — sakin, editoryal; ürün bir hikâye gibi akar" |
+| Name + one-line idea | Named after its metaphor in the product's world, plus why it fits *this* product (must fail the swap test in `direction-finding.md` §5) |
 | Palette | 5 swatches: background, surface, ink, accent, event colour |
-| Type | UI face + optional expressive face for 1–3 words |
-| Shape | pills + 28px cards / sharp chamfers / heavy borders |
+| Type | UI face + the emphasis device (weight, colour, case, second face…) |
+| Shape | the shape language and its radius / border values |
 | Signature animation | the one moving thing that shows a product truth |
 | Landing ideas | 3 bullets: hero, one interactive tool, one section |
 | Panel ideas | 3 bullets: shell, dashboard, one list/detail page |
@@ -46,27 +48,36 @@ animations, reduced-motion handled) and passes `scripts/verify.js` at
 desktop and mobile widths as shipped. Keep it passing after you fill it.
 
 Each direction is a column (stacked on mobile) containing: the swatches, the
-type sample, a **mini hero** (headline with the accent word, two buttons, the
-signature animation running in pure CSS/SVG), a **mini panel** (sidebar stub
-+ one stat tile + one list row), the landing/panel/animation ideas and the
-fit line — all painted with that direction's tokens, so the user sees the
-landing and the panel feel together.
+type sample, a **mini hero** (headline using the direction's emphasis device,
+two buttons, the signature animation running in pure CSS/SVG), a **mini
+panel** (sidebar stub + one stat tile + one list row), the
+landing/panel/animation ideas and the fit line — all painted with that
+direction's tokens, so the user sees the landing and the panel feel together.
 
-When filling it:
+The template ships in deliberate grey with system fonts: it is a skeleton,
+not a style. Nothing in it is a suggestion. When filling it:
 
 - Replace every `[bracketed]` placeholder; delete the hint text.
-- Change each `.dir[data-dir]` token block (colours, radius, fonts) and the
-  Google Fonts URL to the fonts you actually use.
+- Write each `.dir[data-dir]` token block from scratch for its direction —
+  colours, radius, border, fonts, emphasis style — and add a Google Fonts
+  `<link>` for the faces you actually use. Pick them from `type-library.md`
+  and confirm with `python3 scripts/check-fonts.py "Face A" "Face B"`
+  (Turkish ğ ş ı İ; some fonts have latin-ext but no İ).
+- Change structure where the direction needs it: a dense direction can show
+  a table row instead of a card, a print-like one can drop the rounded hero
+  frame. Three columns with identical layouts read as one direction.
 - Replace the generic packet-on-a-path with each direction's real signature
-  animation (it must show a product truth, see SKILL.md step 1).
+  animation (it must show a product truth, see SKILL.md step 1). The three
+  signature animations should differ in kind, not only in colour.
 - Use real numbers from the project in the stat tile and list row.
 
-Then show it:
+Then look at it before the user does: run `visual-critique.md` on the
+board (with a browser tool, or `python3 scripts/snapshot.py <board.html>`
+without one), fix what it finds, and only then show it:
 
 - If the Artifact tool is available, publish the file with it (private by
   default) and give the user the link.
-- Otherwise open it in the browser tool, take one screenshot per direction at
-  desktop width, and give the file path.
+- Otherwise give the file path and the desktop screenshot(s).
 
 ## 4. Ask, then build
 

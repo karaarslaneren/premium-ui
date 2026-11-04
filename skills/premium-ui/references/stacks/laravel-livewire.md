@@ -10,13 +10,14 @@ contains `@import "tailwindcss"` / `@theme`.
 ## 1. Theming Flux centrally
 
 Flux paints almost everything with the `zinc` scale, so override that scale
-instead of restyling pages:
+instead of restyling pages. The values below are from one past project and
+only show *where* things go — write your direction's own values:
 
 ```css
 @theme {
-  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
-  /* warm paper at the light end, near-black at the dark end */
+  --font-sans: '[UI face]', ui-sans-serif, system-ui, sans-serif;
+  --font-display: '[emphasis face, if the direction has one]', ui-sans-serif, sans-serif;
+  /* the direction's neutral scale, light end to dark end */
   --color-zinc-50: #f7f6f2; --color-zinc-100: #f1efea; --color-zinc-200: #e6e3dc;
   --color-zinc-300: #d3cfc7; --color-zinc-400: #a3a09a; --color-zinc-500: #73726e;
   --color-zinc-600: #55565a; --color-zinc-700: #393b40; --color-zinc-800: #202328;

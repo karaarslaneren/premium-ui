@@ -15,10 +15,12 @@ Bir projede çalıştırınca hemen kod yazmaz:
    oluşuyor → gerçek verili genel bakış" gibi somut öneriler.
 4. **Seçtiğiniz yönü uygular** ve her bölümü tarayıcıda masaüstü ve mobilde kontrol eder.
 
-![Öneri panosu örneği: kurgusal bir kargo takip ürünü için üç tasarım yönü](docs/proposal-board.png)
+![Öneri panosu örneği: kurgusal bir QR menü ürünü için üç tasarım yönü](docs/proposal-board.png)
 
-*Skill'in örnek bir Next.js projesi (kurgusal "Kargonet") için ürettiği öneri
-panosu. Her yön kendi paleti, yazı tipi, mini giriş bölümü ve panel kartıyla
+*Skill'in örnek bir Next.js projesi (kurgusal QR menü ürünü "Masada") için
+ürettiği öneri panosu. Yönler ürünün dünyasından türetiliyor: logodaki domates
+ve fesleğen, esnaf lokantasının kareli örtüsü, mutfakla salon arasındaki servis
+kapısı. Her yön kendi paleti, yazı tipi, mini giriş bölümü ve panel kartıyla
 gösteriliyor; rakamlar projenin config dosyalarından geliyor.*
 
 ## Kurulum
@@ -66,15 +68,20 @@ devreye sokar.
 | Dosya | Ne anlatır |
 | --- | --- |
 | [`SKILL.md`](skills/premium-ui/SKILL.md) | Çalışma yöntemi: önce öneri, ürün gerçekleri, token'lar, bölüm bölüm ilerleme, tarayıcıda doğrulama |
+| [`direction-finding.md`](skills/premium-ui/references/direction-finding.md) | Tasarım yönlerini ürünün dünyasından türetme; her projede aynı görünümün çıkmasını önleyen eksenler, kurallar ve testler |
+| [`type-library.md`](skills/premium-ui/references/type-library.md) | Türlere göre gruplanmış ~125 Google Fonts yazı tipi, karakter notlarıyla; hepsinde Türkçe karakterler doğrulandı |
 | [`proposal-board.md`](skills/premium-ui/references/proposal-board.md) | Tasarım yönlerini canlı mini tasarımlarla önerme |
 | [`motion-catalog.md`](skills/premium-ui/references/motion-catalog.md) | Animasyon teknikleri ve hazır kodları: scroll reveal, line mask, count-up, SVG akış, sabitlenen bölüm (scroll-pinned), magnetic buton, glow kart, plan önerici, carousel, footer yazısı |
 | [`panel-patterns.md`](skills/premium-ui/references/panel-patterns.md) | Panel çerçevesi, bileşen kütüphanesini merkezden temalama, gerçek verili dashboard, giriş ekranları, dil ayarları |
 | [`craft-baseline.md`](skills/premium-ui/references/craft-baseline.md) | Tip ve boşluk ölçekleri, erişilebilirlik, performans bütçesi, metin (copy), yükleniyor/boş/hata durumları |
+| [`visual-critique.md`](skills/premium-ui/references/visual-critique.md) | Panoyu ve her bölümü kullanıcıdan önce görmek: ekran görüntüsü, altı soru (okunuyor mu, bitmiş mi, kırık mı, kısma, takas, mobil), düzelt ve tekrar çek |
 | [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış, stack'ten bağımsız hatalar ve çözümleri |
 | [`stacks/`](skills/premium-ui/references/stacks/) | Stack'e özel tarifler ve hatalar: [Laravel/Livewire/Flux](skills/premium-ui/references/stacks/laravel-livewire.md), [React/Next/shadcn](skills/premium-ui/references/stacks/react-next.md), [Vue/Nuxt](skills/premium-ui/references/stacks/vue-nuxt.md). Skill yalnızca projeye uyanı okur |
 | [`prompt-template.md`](skills/premium-ui/references/prompt-template.md) | Doldurulacak istek şablonu |
 | [`assets/proposal-board.html`](skills/premium-ui/assets/proposal-board.html) | Öneri panosu şablonu: 3 yön, mini giriş bölümü ve panel, CSS animasyonu |
 | [`scripts/verify.js`](skills/premium-ui/scripts/verify.js) | Tarayıcıda çalışan denetim: yatay taşma, tıklama alanı, kontrast, odak, reduced-motion, görsel ve font kontrolleri (JSON rapor) |
+| [`scripts/snapshot.py`](skills/premium-ui/scripts/snapshot.py) | Tarayıcı aracı yokken: makinedeki Chrome ile yerel bir HTML dosyasının masaüstü ve mobil ekran görüntüsünü alır, `verify.js` raporunu verir |
+| [`scripts/check-fonts.py`](skills/premium-ui/scripts/check-fonts.py) | Seçilen Google Fonts yazı tiplerinde Türkçe karakterlerin (ğ ş ı İ…) gerçekten olup olmadığını font dosyasından kontrol eder |
 
 ## İlkeler
 

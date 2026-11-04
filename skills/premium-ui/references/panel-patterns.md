@@ -23,9 +23,12 @@ attributes and classes before writing overrides.
 Library-specific recipes (Flux, shadcn/ui, Nuxt UI, PrimeVue, Vuetify) are in
 `stacks/<your-stack>.md`.
 
-## 2. App shell: sheet on paper
+## 2. App shell
 
-- Body and sidebar share the background colour (paper / near-black); the
+One proven structure (adapt it to the direction — a dense or print-like
+direction may prefer a bordered, edge-to-edge layout instead):
+
+- Body and sidebar share the background colour; the
   sidebar has no border on desktop.
 - The page content is a raised sheet: `lg:m-2 lg:rounded-[28px] bg-white`
   + a 1px ring + a long soft shadow. Dark mode: one step lighter than the body.
@@ -67,9 +70,10 @@ data and **never another tenant's**.
   of only failing at the limit.
 - Disabled-with-reason beats hidden ("Kuyrukta · 2 dk").
 - Tables: keep the library's table, rely on theme; add badges for state.
-- Auth screens: split layout — left a dark rounded panel with an ambient
-  product animation (SMIL packets along paths) + one quote with the serif
-  accent word; right the form on paper, centred, max 380px.
+- Auth screens: split layout — one side carries the direction's character
+  (an ambient product animation, e.g. SMIL packets along paths, plus one
+  line of copy using the emphasis device); the other side is the form on the
+  plain background, centred, max 380px.
 
 ## 5. Language
 

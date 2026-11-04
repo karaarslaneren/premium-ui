@@ -47,7 +47,7 @@ Each line slides up from behind its own mask. Use on section headings only.
 ```html
 <h2 data-reveal-lines>
   <span class="line"><span>Bir kez bağlayın,</span></span>
-  <span class="line"><span><em class="serif">her yerde</em> satın.</span></span>
+  <span class="line"><span><em class="accent">her yerde</em> satın.</span></span>
 </h2>
 ```
 ```css

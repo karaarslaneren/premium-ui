@@ -11,10 +11,13 @@ understand what the product does by watching the page move.
 
 Reference files (read the one the task needs, not all):
 
+- `references/direction-finding.md` — how to derive directions from the product's world so every project doesn't get the same look. Read before any proposal or "you choose".
+- `references/type-library.md` — faces grouped by genre with character notes, all checked for Turkish glyphs. Pick faces from here, not from memory.
 - `references/proposal-board.md` — how to propose 2–3 directions with live mini-designs before building.
 - `references/motion-catalog.md` — every animation technique, with when to use it and drop-in code.
 - `references/panel-patterns.md` — app shell, dashboard, tables, forms, empty states, theming a component library.
 - `references/craft-baseline.md` — type/spacing scales, accessibility, performance budget, copy, loading/empty/error states.
+- `references/visual-critique.md` — how to look at the board and each built section (screenshots, six questions, fix and re-shoot) before the user sees it.
 - `references/pitfalls.md` — stack-agnostic mistakes that already happened once; check before shipping.
 - `references/stacks/<stack>.md` — framework-specific recipes and pitfalls. Read **only** the one matching the project:
   `laravel-livewire.md` (Blade, Livewire, Flux), `react-next.md` (React, Next.js, shadcn/ui), `vue-nuxt.md` (Vue, Nuxt, Inertia + Vue).
@@ -25,6 +28,8 @@ Bundled files:
 
 - `assets/proposal-board.html` — the proposal board template (step 0).
 - `scripts/verify.js` — the page audit run in step 6.
+- `scripts/snapshot.py` — when there is no browser tool: headless Chrome screenshots (desktop, mobile) of a local HTML file plus the `verify.js` report.
+- `scripts/check-fonts.py` — checks that Google Fonts families exist and contain the needed glyphs (default ğĞşŞıİçÇöÖüÜ). Run it on every face before it goes on a board.
 
 ## Workflow
 
@@ -36,7 +41,8 @@ board** — 2–3 distinct directions as live mini-designs (palette, type, a min
 hero and a mini panel with the signature animation running) plus a list of
 concrete, project-specific improvements ("Bu projede önerdiklerim"). Ask the
 user to pick a direction and which improvements to include, then continue.
-Follow `references/proposal-board.md`.
+Find the directions with `references/direction-finding.md`, then follow
+`references/proposal-board.md`.
 
 ### 1. Understand the product before designing anything
 
@@ -66,16 +72,21 @@ and one describing how this product's look will differ, before coding.
 
 ### 3. Pick one direction and set tokens first
 
-Choose a single direction and commit (examples: light editorial on warm paper;
-dark technical; bold brutalist). Then define tokens before any component:
+Choose a single direction and commit. When the user lets you choose ("sen
+seç", "just build it"), still derive it with `direction-finding.md` §1–2 —
+quickly, in your head — instead of reaching for a familiar look; say in one
+sentence which part of the product's world it comes from. Then define tokens
+before any component:
 
 - Colours: background, raised surface, ink, muted text, line, one brand accent,
   one secondary "event" colour (e.g. orders = orange). Light and dark values.
-- Type: one sans for UI, optionally one expressive face used *only* for 1–3
-  emphasis words per heading (e.g. italic serif). Tight tracking on display
-  sizes (−0.03em), relaxed body.
-- Shape: one radius language (pills + 20–32px cards, or sharp). Apply it
-  everywhere, including buttons and inputs.
+- Type: one face for UI (from `type-library.md`), and one emphasis device chosen with the direction
+  (weight contrast, colour, case/tracking, a second face, highlight…) used
+  sparingly in headings. Tracking and line-height follow the face — tight
+  for large grotesks, looser for condensed or mono.
+- Shape: one shape language from the direction (soft, small radius, sharp,
+  cut corners, heavy borders…). Apply it everywhere, including buttons and
+  inputs.
 - Easing: `--ease: cubic-bezier(.16,1,.3,1)` for reveals,
   `--spring: cubic-bezier(.34,1.56,.64,1)` for things that land/snap.
 - Scales: type, spacing and elevation from `craft-baseline.md` §1 — set them
@@ -147,7 +158,10 @@ After each section: load it in the browser at desktop (1440×900) and mobile
   infinite loops must be 0.
 - Press Tab through the new section once: focus is visible and in order.
 - Screenshots after animations settle (reveals are mid-transition right after
-  scroll — wait or force the revealed class before judging).
+  scroll — wait or force the revealed class before judging), then the
+  visual critique in `visual-critique.md`: look at them and answer its six
+  questions. Without a browser tool, `scripts/snapshot.py` takes the
+  screenshots and runs `verify.js` for local HTML.
 - Interactive pieces with **real pointer drags/clicks**, not only by setting
   values in JS (a JS `.value =` can pass while a real drag fails).
 - Light and dark mode for panels.
