@@ -18,6 +18,7 @@ Reference files (read the one the task needs, not all):
 - `references/panel-patterns.md` — app shell, dashboard, tables, forms, empty states, theming a component library.
 - `references/craft-baseline.md` — type/spacing scales, accessibility, performance budget, copy, loading/empty/error states.
 - `references/visual-critique.md` — how to look at the board and each built section (screenshots, six questions, fix and re-shoot) before the user sees it.
+- `references/learning.md` — the skill's memory across sessions: recall what earlier boards used and what went wrong, log choices and feedback, distil lessons. Read at the start of every session.
 - `references/pitfalls.md` — stack-agnostic mistakes that already happened once; check before shipping.
 - `references/stacks/<stack>.md` — framework-specific recipes and pitfalls. Read **only** the one matching the project:
   `laravel-livewire.md` (Blade, Livewire, Flux), `react-next.md` (React, Next.js, shadcn/ui), `vue-nuxt.md` (Vue, Nuxt, Inertia + Vue).
@@ -29,9 +30,14 @@ Bundled files:
 - `assets/proposal-board.html` — the proposal board template (step 0).
 - `scripts/verify.js` — the page audit run in step 6.
 - `scripts/snapshot.py` — when there is no browser tool: headless Chrome screenshots (desktop, mobile) of a local HTML file plus the `verify.js` report.
+- `scripts/learn.py` — the memory: `recall` at the start, `board` / `choice` / `feedback` / `issue` as they happen, `lesson` at the end. Stored in `~/.claude/premium-ui/`, outside the plugin.
 - `scripts/check-fonts.py` — checks that Google Fonts families exist and contain the needed glyphs (default ğĞşŞıİçÇöÖüÜ). Run it on every face before it goes on a board.
 
 ## Workflow
+
+Before anything else, run `python3 scripts/learn.py recall --project <name>`
+and apply what it returns (`references/learning.md` §1): lessons, faces and
+metaphors to avoid, this project's earlier boards and the user's words.
 
 ### 0. Propose before you build
 
@@ -170,7 +176,11 @@ After each section: load it in the browser at desktop (1440×900) and mobile
 
 Report what you checked and what you could not (e.g. "no local user to log in").
 
-### 7. Keep the pitfalls list growing
+### 7. Learn from the session
+
+Distil the session into at most three lessons with `learn.py lesson`
+(`references/learning.md` §3) and tell the user in one line what was
+remembered. Then the shared list:
 
 `pitfalls.md` is made of mistakes that really happened. When this session
 fixed a bug that the user had to point out, or one that cost more than one

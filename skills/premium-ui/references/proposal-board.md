@@ -73,7 +73,9 @@ not a style. Nothing in it is a suggestion. When filling it:
 
 Then look at it before the user does: run `visual-critique.md` on the
 board (with a browser tool, or `python3 scripts/snapshot.py <board.html>`
-without one), fix what it finds, and only then show it:
+without one), fix what it finds, log the board (`python3 scripts/learn.py board
+<board.html> --project <name>`, and an `issue` for each problem the critique
+found), and only then show it:
 
 - If the Artifact tool is available, publish the file with it (private by
   default) and give the user the link.
@@ -88,4 +90,5 @@ to include. Only after the answer, continue with SKILL.md step 3 onward using
 the chosen direction's tokens.
 
 If the user says "sen seç" / "you choose": pick, say why in one sentence,
-and proceed.
+and proceed. Log the answer either way (`learn.py choice`, plus `feedback`
+with the user's words if they said more than a letter).
