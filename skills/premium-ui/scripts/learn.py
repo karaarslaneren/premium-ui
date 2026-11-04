@@ -82,7 +82,8 @@ def font_names(decl):
     names = []
     for part in decl.split(","):
         name = part.strip().strip("'\"").strip()
-        if name and not name.startswith("var(") and name.lower() not in GENERIC:
+        if (name and not name.startswith("var(") and name.lower() not in GENERIC
+                and not re.fullmatch(r"[\d.]+[a-z%]*|normal|bold|bolder|lighter|italic", name.lower())):
             names.append(name)
     return names
 
@@ -107,7 +108,8 @@ def parse_board(text):
             d = dirs.setdefault(key, {"key": key, "name": "", "fonts": [], "vars": {}})
             for prop, val in re.findall(r"(--[\w-]+|font-family)\s*:\s*([^;]+)", body):
                 val = val.strip()
-                if prop == "font-family" or re.search(r"font|ui|display|head|body|mono|serif|sans", prop):
+                if prop == "font-family" or (re.search(r"font|ui|display|head|body|mono|serif|sans", prop)
+                                             and not re.search(r"(-w|weight|size|lh|leading|track|spacing|style|case)$", prop)):
                     for n in font_names(val):
                         if n not in d["fonts"]:
                             d["fonts"].append(n)
@@ -169,7 +171,7 @@ def cmd_lesson(a):
     if norm(line) in {norm(l) for l in current.splitlines()}:
         print("already in lessons.md")
         return
-    LESSONS.write_text(current.rstrip("\n") + f"\n- {line}\n", encoding="utf-8")
+    LESSONS.write_text(current + ("" if current.endswith("\n") else "\n") + f"- {line}\n", encoding="utf-8")
     print(f"added to {LESSONS}")
 
 

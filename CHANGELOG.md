@@ -73,6 +73,28 @@
   hepsini geçti. Önceki üç turda her turda bir ya da iki panoda ghost buton
   kontrast hatası vardı. 4 panoda 19 farklı font ailesi kullanıldı.
 - README görseli son turun Masada panosuyla değiştirildi.
+- **Kendini geliştirme (hafıza):** yeni `scripts/learn.py` ve
+  `references/learning.md`. Skill her oturumun başında `recall` ile önceki
+  panolarda kullanılan fontları ve metaforları, bu projede daha önce
+  gösterilenleri, kullanıcının seçimlerini ve sözlerini, tekrar eden hataları
+  ve dersleri okuyor. Oturum sırasında panoyu, seçimi, geri bildirimi ve
+  bulunan hataları kaydediyor; sonda en fazla üç ders çıkarıyor. 3 kez
+  tekrarlayan hata için `pitfalls.md` satırı öneriyor. Hafıza
+  `~/.claude/premium-ui/` altında, plugin güncellemesinden etkilenmiyor;
+  `PREMIUM_UI_MEMORY=off` ile kapanıyor. Hafıza yalnızca tekrarı önlemek
+  için kullanılıyor; beğenilen görünümü yeniden üretmek için değil.
+- **Hafıza eval'i:** önceki üç turun panoları hafızaya yüklenip iki ajan
+  çalıştırıldı. Kargonet, altı turdur dönüp durduğu metaforlardan (otoyol
+  tabelası, çeyrek saat, aktarma bandı) ilk kez çıktı: Seksen Bir İl, El
+  Terminali, Kapı Numarası; 7 fontun hiçbiri önceki panolarda yoktu.
+  Masada, kayıtlı "kırtasiye hissi istemiyorum, akşam servisi gibi canlı
+  olsun" geri bildirimine uydu (Kordon Masası, Ocak Başı, Kuş Bakışı Sofra).
+  İki pano da masaüstü ve mobilde `verify.js` kontrollerini geçti. Ajanlar
+  hafızaya kendi dersini ekledi; biri mevcut dersi kopyalamak yerine
+  genişletti. Ghost buton hatası ders varken yine çıktı ama görsel kontrolde
+  yakalandı; `pitfalls.md` satırına `:not(.ghost)` ayrıntısı eklendi.
+- README baştan yazıldı: neden, nasıl çalışır, gereksinimler, kurulum
+  (plugin, güncelleme, elle), kullanım örnekleri, hafıza.
 
 ## 1.1.0
 
