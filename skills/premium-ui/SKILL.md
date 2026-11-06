@@ -30,7 +30,7 @@ Bundled files:
 - `assets/proposal-board.html` — the proposal board template (step 0).
 - `scripts/verify.js` — the page audit run in step 6.
 - `scripts/snapshot.py` — when there is no browser tool: headless Chrome screenshots (desktop, mobile) of a local HTML file plus the `verify.js` report.
-- `scripts/learn.py` — the memory: `recall` at the start, `board` / `choice` / `feedback` / `issue` as they happen, `lesson` at the end. Stored in `~/.claude/premium-ui/`, outside the plugin.
+- `scripts/learn.py` — the memory: `recall` at the start, `board` / `choice` / `feedback` / `issue` as they happen, `lesson` at the end, `share` (opt-in) to send anonymous lessons to the skill's repo. Stored in `~/.claude/premium-ui/`, outside the plugin.
 - `scripts/check-fonts.py` — checks that Google Fonts families exist and contain the needed glyphs (default ğĞşŞıİçÇöÖüÜ). Run it on every face before it goes on a board.
 
 ## Workflow
@@ -180,7 +180,9 @@ Report what you checked and what you could not (e.g. "no local user to log in").
 
 Distil the session into at most three lessons with `learn.py lesson`
 (`references/learning.md` §3) and tell the user in one line what was
-remembered. Then the shared list:
+remembered. If `recall` showed a "Sharing" section, offer once to
+send the lessons to the skill's author (`learning.md` §4); send only on a
+clear yes. Then the shared list:
 
 `pitfalls.md` is made of mistakes that really happened. When this session
 fixed a bug that the user had to point out, or one that cost more than one

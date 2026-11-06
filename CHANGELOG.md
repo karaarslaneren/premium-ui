@@ -93,6 +93,17 @@
   hafızaya kendi dersini ekledi; biri mevcut dersi kopyalamak yerine
   genişletti. Ghost buton hatası ders varken yine çıktı ama görsel kontrolde
   yakalandı; `pitfalls.md` satırına `:not(.ghost)` ayrıntısı eklendi.
+- **Öğrenilenleri paylaşma:** `learn.py share`, son paylaşımdan bu yana
+  birikenlerden anonim bir rapor hazırlıyor: dersler, hata türü sayıları,
+  kullanılan fontlar, seçilen yönlerin açık/koyu ve köşe dağılımı. Proje
+  adları, yollar, URL'ler ve e-postalar maskeleniyor; kullanıcının sözleri,
+  metafor adları ve kod rapora girmiyor. Skill raporu kullanıcıya gösterip
+  yalnızca açık onayla gönderiyor (`gh` ile issue ya da önceden doldurulmuş
+  bağlantı). Yeterince şey öğrendiğinde oturum sonunda bir kez soruyor;
+  "bir daha sorma" kalıcı. Bakımcı için `tools/collect-lessons.py` açık
+  `[öğrenilenler]` issue'larını toplayıp birden fazla kullanıcıdan gelen dersleri,
+  `pitfalls.md`'de olmayan hata türlerini ve † işaretsiz ama sık kullanılan
+  fontları listeliyor. `.github/ISSUE_TEMPLATE/ogrenilenler.md` eklendi.
 - README baştan yazıldı: neden, nasıl çalışır, gereksinimler, kurulum
   (plugin, güncelleme, elle), kullanım örnekleri, hafıza.
 

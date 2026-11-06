@@ -78,3 +78,33 @@ Tell the user in one line what was remembered ("Hafızaya eklendi: koyu
 zeminde ghost buton kontrastı her yönde kontrol edilecek"). If they say not
 to remember ("bunu hatırlama", "hafıza kullanma"), don't log; for good,
 `PREMIUM_UI_MEMORY=off` turns the script off.
+
+## 4. Share with the skill's author (opt-in)
+
+Lessons in `lessons.md` help only this user. Shared, they can reach
+everyone through the next release. Sharing is always the user's decision,
+never automatic.
+
+**When to offer:** only when `recall` printed a "Sharing" section, or the
+user asks ("premium-ui öğrendiklerini paylaş"). Offer once, at the end of
+the session, after the lessons are written. Never more than once a session,
+and never when the user is in the middle of a task.
+
+1. Run `python3 scripts/learn.py share`. It prints a preview: the lessons,
+   issue counts, faces used, light/dark and corner picks. Project names,
+   paths, URLs and e-mails are replaced; user quotes, metaphor names and
+   code are left out.
+2. Read the preview yourself. If a lesson still names the client, the
+   product or anything private, rewrite that line in `lessons.md` first
+   and run the preview again.
+3. Show the user the lessons part and ask one question, e.g. "Bu öğrendiklerimi
+   anonim olarak premium-ui'ye (GitHub issue) göndereyim mi? Proje adı ve
+   kod içermiyor." Multiple choice if the tool exists: "Gönder", "Şimdi
+   değil", "Bir daha sorma".
+4. Only on a clear yes: `learn.py share --send`. With a logged-in `gh` it
+   opens the issue and prints its link; otherwise it prints a pre-filled
+   link the user opens and submits themselves (nothing is sent before they
+   press Submit). "Bir daha sorma" → `learn.py share --never`. "Şimdi
+   değil" → nothing; it will be offered again once more has piled up.
+
+Each share covers only what is new since the previous one.

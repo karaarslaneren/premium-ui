@@ -8,11 +8,17 @@ Usage:
     python3 learn.py feedback --project NAME --text "user's words"
     python3 learn.py issue --project NAME --kind ghost-button [--text "..."]
     python3 learn.py lesson "One line: what to do differently, and why"
+    python3 learn.py share [--send | --never] [--all]
 
 Everything is stored in $PREMIUM_UI_HOME (default ~/.claude/premium-ui), so it
 survives plugin updates: journal.jsonl (one event per line) and lessons.md
 (distilled rules, read at the start of every session). PREMIUM_UI_MEMORY=off
 turns every command into a no-op. Standard library only.
+
+`share` turns what was learned since the last share into an anonymous report
+(lessons, issue counts, faces used, light/dark and corner picks; no project
+names, user quotes, paths or code) for the skill's GitHub repo. Without
+--send it only prints the report; send it only after the user said yes.
 """
 import argparse
 import collections
@@ -21,12 +27,20 @@ import html
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
+import urllib.parse
 from pathlib import Path
 
 HOME = Path(os.environ.get("PREMIUM_UI_HOME") or Path.home() / ".claude" / "premium-ui")
 JOURNAL = HOME / "journal.jsonl"
 LESSONS = HOME / "lessons.md"
+SHARED = HOME / "shared.json"
+REPO = os.environ.get("PREMIUM_UI_REPO", "karaarslaneren/premium-ui")
+LABEL = "öğrenilenler"
+SHARE_MARKER = "<!-- premium-ui-share v1 -->"
 LESSONS_HEADER = "# premium-ui lessons\n\nOne line each. Newest last. Merge duplicates, delete what stopped being true.\n\n"
 GENERIC = {"serif", "sans-serif", "monospace", "system-ui", "ui-sans-serif", "ui-serif", "ui-monospace",
            "cursive", "fantasy", "inherit", "initial", "-apple-system", "blinkmacsystemfont", "segoe ui",
@@ -264,6 +278,149 @@ def cmd_recall(a):
             print(f"- {kind}: {n}x{hint}")
         print("Check the top ones before showing anything.")
 
+    state = shared_state()
+    if not state.get("never"):
+        new_events, new_lessons = pending_share(state)
+        new_issues = sum(1 for e in new_events if e.get("type") == "issue")
+        if len(new_lessons) >= 2 or new_issues >= 5:
+            print(f"\n## Sharing\n\n{len(new_lessons)} new lessons and {new_issues} issues since the last share. "
+                  "At the end of this session, offer once to share them (learning.md §4).")
+
+
+# ---------- share ----------
+
+def lesson_lines():
+    if not LESSONS.exists():
+        return []
+    return [l[2:].strip() for l in LESSONS.read_text(encoding="utf-8").splitlines() if l.startswith("- ")]
+
+
+def shared_state():
+    try:
+        return json.loads(SHARED.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def skill_version():
+    try:
+        manifest = Path(__file__).resolve().parents[3] / ".claude-plugin" / "plugin.json"
+        return json.loads(manifest.read_text(encoding="utf-8")).get("version", "?")
+    except (OSError, ValueError, IndexError):
+        return "?"
+
+
+def scrub(text, projects):
+    text = re.sub(r"https?://\S+", "<url>", text)
+    text = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "<email>", text)
+    text = re.sub(r"(~|/Users|/home|[A-Z]:\\)[^\s`'\")]*", "<path>", text)
+    for name in sorted(projects, key=len, reverse=True):
+        if name and len(name) > 2:
+            text = re.sub(re.escape(name), "<proje>", text, flags=re.I)
+    return text
+
+
+def pending_share(state=None):
+    """What a share would contain now: events and lessons not shared yet."""
+    state = shared_state() if state is None else state
+    since = state.get("last", "")
+    events = [e for e in read_journal() if e.get("ts", "") > since]
+    done = set(state.get("lessons", []))
+    lessons = [l for l in lesson_lines() if norm(l) not in done]
+    return events, lessons
+
+
+def build_report(events, lessons):
+    projects = {e.get("project") for e in read_journal() if e.get("project")}
+    boards = [e for e in events if e.get("type") == "board"]
+    issues = collections.Counter(e["kind"] for e in events if e.get("type") == "issue")
+    fonts = collections.Counter(f for b in boards for f in dict.fromkeys(b.get("fonts") or [f for d in b["dirs"] for f in d["fonts"]]))
+    spread = collections.Counter(d[attr] for b in boards for d in b["dirs"] for attr in ("tone", "corners") if d.get(attr))
+    picked, passed = collections.Counter(), collections.Counter()
+    last_board = {}
+    for e in read_journal():
+        if e.get("type") == "board":
+            last_board[e.get("project")] = e
+        elif e.get("type") == "choice" and e in events and e.get("project") in last_board:
+            keys = re.findall(r"[a-z]", e["picked"].lower()) if len(e["picked"]) <= 5 else []
+            for d in last_board[e["project"]]["dirs"]:
+                for attr in ("tone", "corners"):
+                    if d.get(attr):
+                        (picked if d["key"].lower() in keys else passed)[d[attr]] += 1
+    lessons = [scrub(l, projects) for l in lessons]
+    data = {
+        "v": 1, "skill": skill_version(),
+        "from": min((e["ts"][:10] for e in events), default=None), "to": max((e["ts"][:10] for e in events), default=None),
+        "boards": len(boards), "choices": sum(1 for e in events if e.get("type") == "choice"),
+        "feedback": sum(1 for e in events if e.get("type") == "feedback"),
+        "lessons": lessons, "issues": dict(issues.most_common()), "fonts": dict(fonts.most_common()),
+        "spread": dict(spread), "picked": dict(picked), "passed": dict(passed),
+    }
+    title = f"[öğrenilenler] {len(lessons)} yeni kural, {sum(issues.values())} hata, {len(boards)} pano (premium-ui {data['skill']})"
+    md = [SHARE_MARKER, "",
+          f"Skill {data['skill']} · {data['from'] or '-'} → {data['to'] or '-'} · {data['boards']} pano, "
+          f"{data['choices']} seçim, {data['feedback']} geri bildirim", ""]
+    md += ["### Öğrenilen kurallar", ""] + ([f"- {l}" for l in lessons] or ["(yok)"]) + [""]
+    if issues:
+        md += ["### Bulunan hatalar", ""] + [f"- `{k}`: {n}" for k, n in issues.most_common()] + [""]
+    if fonts:
+        md += ["### Panolarda kullanılan fontlar", "", ", ".join(f"{f} ({n})" if n > 1 else f for f, n in fonts.most_common()), ""]
+    if picked or passed:
+        md += ["### Seçilen yönler", "", "Seçilen: " + (", ".join(f"{k} {v}" for k, v in picked.most_common()) or "-")
+               + " · seçilmeyen: " + (", ".join(f"{k} {v}" for k, v in passed.most_common()) or "-"), ""]
+    md += ["<details><summary>Veri</summary>", "", "```json", json.dumps(data, ensure_ascii=False), "```", "", "</details>", "",
+           "_`learn.py share` ile, kullanıcının onayıyla gönderildi. Proje adları, kullanıcının sözleri, dosya yolları ve kod içermez._"]
+    return title, "\n".join(md), data
+
+
+def mark_shared(lessons_all):
+    state = shared_state()
+    state["last"] = now()
+    state["lessons"] = sorted(set(state.get("lessons", [])) | {norm(l) for l in lessons_all})
+    SHARED.write_text(json.dumps(state, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def cmd_share(a):
+    HOME.mkdir(parents=True, exist_ok=True)
+    if a.never:
+        state = shared_state(); state["never"] = True
+        SHARED.write_text(json.dumps(state, ensure_ascii=False, indent=1), encoding="utf-8")
+        print("OK: sharing will not be offered again (delete shared.json to undo).")
+        return
+    events, lessons = pending_share({} if a.all else None)
+    if not lessons and not any(e.get("type") in ("board", "issue") for e in events):
+        print("Nothing new to share since the last report.")
+        return
+    title, body, _ = build_report(events, lessons)
+    if not a.send:
+        print(f"Title: {title}\n\n{body}\n")
+        print(f"Preview only. Show this to the user; if they agree, run: learn.py share --send   (repo: {REPO})")
+        return
+    gh = shutil.which("gh")
+    if gh and subprocess.run([gh, "auth", "status"], capture_output=True).returncode == 0:
+        with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
+            f.write(body)
+        for extra in (["--label", LABEL], []):
+            r = subprocess.run([gh, "issue", "create", "--repo", REPO, "--title", title, "--body-file", f.name, *extra],
+                               capture_output=True, text=True)
+            if r.returncode == 0:
+                break
+        os.unlink(f.name)
+        if r.returncode == 0:
+            mark_shared(lesson_lines())
+            print("Sent: " + r.stdout.strip())
+            return
+        print("gh could not create the issue: " + (r.stderr.strip() or r.stdout.strip()))
+    url = f"https://github.com/{REPO}/issues/new?" + urllib.parse.urlencode({"title": title, "body": body, "labels": LABEL})
+    if len(url) > 7500:
+        path = HOME / "share-report.md"
+        path.write_text(body, encoding="utf-8")
+        url = f"https://github.com/{REPO}/issues/new?" + urllib.parse.urlencode({"title": title, "labels": LABEL})
+        print(f"Report saved to {path}. Open the link, paste the file's contents as the body, submit:\n{url}")
+    else:
+        print(f"Open this link and press Submit (nothing is sent until then):\n{url}")
+    mark_shared(lesson_lines())
+
 
 def main(argv):
     p = argparse.ArgumentParser(description="premium-ui memory: what earlier sessions designed and learned.")
@@ -274,12 +431,14 @@ def main(argv):
     f = sub.add_parser("feedback"); f.add_argument("--project", required=True); f.add_argument("--text", required=True)
     i = sub.add_parser("issue"); i.add_argument("--project", required=True); i.add_argument("--kind", required=True); i.add_argument("--text")
     l = sub.add_parser("lesson"); l.add_argument("text")
+    s = sub.add_parser("share"); s.add_argument("--send", action="store_true"); s.add_argument("--never", action="store_true")
+    s.add_argument("--all", action="store_true", help="include what was already shared")
     a = p.parse_args(argv)
     if os.environ.get("PREMIUM_UI_MEMORY", "").lower() in ("off", "0", "false"):
         print("premium-ui memory is off (PREMIUM_UI_MEMORY); nothing read or written.")
         return
     {"recall": cmd_recall, "board": cmd_board, "choice": cmd_choice, "feedback": cmd_feedback,
-     "issue": cmd_issue, "lesson": cmd_lesson}[a.cmd](a)
+     "issue": cmd_issue, "lesson": cmd_lesson, "share": cmd_share}[a.cmd](a)
 
 
 if __name__ == "__main__":

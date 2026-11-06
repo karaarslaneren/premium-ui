@@ -37,7 +37,7 @@ hedefler:
 
 ## Nasıl çalışır
 
-1. **Hatırlar.** Önceki oturumlardan çıkan dersleri, kullanılmış font ve
+1. **Hatırlar.** Önceki oturumlarda öğrendiği kuralları, kullanılmış font ve
    metaforları, bu projede daha önce gösterilenleri okur.
 2. **Projeyi inceler.** Stack'i tespit eder (Laravel/Livewire, React/Next,
    Vue/Nuxt…); ürünün ne yaptığını, mevcut ekranları, bileşen kütüphanesini
@@ -53,7 +53,7 @@ hedefler:
    bölüm bölüm. Her bölüm tarayıcıda masaüstü ve mobilde, açık ve koyu
    modda doğrulanır.
 6. **Öğrenir.** Seçimleri, geri bildirimleri ve bulunan hataları kaydeder;
-   oturum sonunda bunları kalıcı derslere dönüştürür.
+   oturum sonunda bunları kalıcı kurallara dönüştürür.
 
 ## Kurulum
 
@@ -160,13 +160,34 @@ Skill her oturumda öğrendiklerini `~/.claude/premium-ui/` altında tutar:
 
 - `journal.jsonl`: gösterilen panolar (yön adları, fontlar, ton), seçimler,
   kullanıcının geri bildirimleri ve bulunan hatalar.
-- `lessons.md`: bunlardan çıkarılan kısa, kalıcı dersler. Elle
+- `lessons.md`: bunlardan çıkarılan kısa, kalıcı kurallar. Elle
   düzenleyebilirsiniz.
 
-Bu dosyalar yalnızca sizin makinenizde kalır, hiçbir yere gönderilmez.
+Bu dosyalar sizin makinenizde kalır. Yalnızca siz onaylarsanız anonim bir
+özeti paylaşılır (aşağıda).
 Konumu `PREMIUM_UI_HOME` ortam değişkeniyle değiştirebilir,
 `PREMIUM_UI_MEMORY=off` ile hafızayı tamamen kapatabilirsiniz. Tek bir
 oturum için "bunu hatırlama" demeniz de yeterli.
+
+## Öğrendiklerini paylaşma
+
+Skill'in sizin projelerinizde öğrendikleri, onay verirseniz herkese
+ulaşabilir:
+
+1. Skill yeterince şey öğrendiğinde oturum sonunda bir kez sorar: "Bu
+   öğrendiklerimi anonim olarak premium-ui'ye göndereyim mi?" İstediğiniz zaman
+   "premium-ui öğrendiklerini paylaş" diyerek de başlatabilirsiniz.
+2. Göndermeden önce raporun tamamını görürsünüz. Raporda öğrenilen kurallar, hata
+   türlerinin sayıları, kullanılan fontlar ve seçilen yönlerin açık/koyu ve
+   köşe dağılımı bulunur. Proje adları, sözleriniz, dosya yolları ve kod
+   bulunmaz.
+3. Onaylarsanız rapor bu repoda `[öğrenilenler]` başlıklı bir issue olarak açılır.
+   `gh` kuruluysa doğrudan; değilse önceden doldurulmuş bir bağlantıyla,
+   "Submit"e siz basarsınız.
+4. Gelen raporlar derlenir, birden fazla kullanıcıdan gelen kurallar ve
+   hatalar skill'e eklenir ve bir sonraki sürümle herkese ulaşır.
+
+"Bir daha sorma" derseniz bir daha sorulmaz.
 
 ## İçerik
 
@@ -180,7 +201,7 @@ oturum için "bunu hatırlama" demeniz de yeterli.
 | [`panel-patterns.md`](skills/premium-ui/references/panel-patterns.md) | Panel çerçevesi, bileşen kütüphanesini merkezden temalama, gerçek verili dashboard, giriş ekranları, dil ayarları |
 | [`craft-baseline.md`](skills/premium-ui/references/craft-baseline.md) | Tip ve boşluk ölçekleri, erişilebilirlik, performans bütçesi, metin, yükleniyor/boş/hata durumları |
 | [`visual-critique.md`](skills/premium-ui/references/visual-critique.md) | Panoyu ve her bölümü kullanıcıdan önce görmek: ekran görüntüsü, altı soru, düzelt ve tekrar çek |
-| [`learning.md`](skills/premium-ui/references/learning.md) | Oturumlar arası hafıza: neyin hatırlanacağı, ne zaman kaydedileceği, derslerin nasıl çıkarılacağı |
+| [`learning.md`](skills/premium-ui/references/learning.md) | Oturumlar arası hafıza: neyin hatırlanacağı, ne zaman kaydedileceği, kuralların nasıl çıkarılacağı |
 | [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış, stack'ten bağımsız hatalar ve çözümleri |
 | [`stacks/`](skills/premium-ui/references/stacks/) | Stack'e özel tarifler ve hatalar: [Laravel/Livewire/Flux](skills/premium-ui/references/stacks/laravel-livewire.md), [React/Next/shadcn](skills/premium-ui/references/stacks/react-next.md), [Vue/Nuxt](skills/premium-ui/references/stacks/vue-nuxt.md) |
 | [`prompt-template.md`](skills/premium-ui/references/prompt-template.md) | Doldurulacak istek şablonu |
@@ -188,7 +209,8 @@ oturum için "bunu hatırlama" demeniz de yeterli.
 | [`scripts/verify.js`](skills/premium-ui/scripts/verify.js) | Tarayıcıda çalışan denetim: yatay taşma, tıklama alanı, kontrast, odak, reduced-motion, görsel ve font kontrolleri (JSON rapor) |
 | [`scripts/snapshot.py`](skills/premium-ui/scripts/snapshot.py) | Tarayıcı aracı yokken makinedeki Chrome ile masaüstü ve mobil ekran görüntüsü alır, `verify.js` raporunu verir |
 | [`scripts/check-fonts.py`](skills/premium-ui/scripts/check-fonts.py) | Seçilen Google Fonts yazı tiplerinde Türkçe karakterlerin (ğ ş ı İ…) gerçekten olup olmadığını kontrol eder |
-| [`scripts/learn.py`](skills/premium-ui/scripts/learn.py) | Hafıza: başta `recall`, oturum sırasında `board` / `choice` / `feedback` / `issue`, sonda `lesson` |
+| [`scripts/learn.py`](skills/premium-ui/scripts/learn.py) | Hafıza: başta `recall`, oturum sırasında `board` / `choice` / `feedback` / `issue`, sonda `lesson`; `share` ile onaylı, anonim paylaşım |
+| [`tools/collect-lessons.py`](tools/collect-lessons.py) | Bakımcı için: kullanıcıların paylaştığı `[öğrenilenler]` issue'larını toplar, skill'e eklenecekleri önerir |
 
 ## İlkeler
 
@@ -203,6 +225,17 @@ oturum için "bunu hatırlama" demeniz de yeterli.
   reddedilen yönü yeniden önermez.
 
 ## Geliştirme
+
+- Paylaşılan öğrenilenleri derlemek için:
+
+  ```bash
+  python3 tools/collect-lessons.py
+  ```
+
+  `gh` ile açık `[öğrenilenler]` issue'larını okur. Birden fazla kullanıcının yazdığı
+  kuralları, `pitfalls.md`'de olmayan hata türlerini ve † ile
+  işaretlenmemiş ama sık kullanılan fontları gösterir. Bir rapordaki bilgi
+  sürüme girince issue'yu kapatın.
 
 - Test senaryoları `skills/premium-ui/evals/` altında (`claude plugin eval`
   formatında); tetiklenme sorguları
