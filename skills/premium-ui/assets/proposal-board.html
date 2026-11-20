@@ -80,6 +80,10 @@
   .improvements h2 { font-size: 22px; letter-spacing: -.02em; }
   .improvements li { margin: 6px 0; }
   .improvements li b { font-weight: 600; }
+  .plan p { margin: -8px 0 12px; color: var(--page-muted); }
+  .scenes { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+  .scenes li { margin: 0; background: #fff; border-radius: 10px; padding: 14px; display: grid; gap: 4px; font-size: 14px; }
+  .scenes li span { color: var(--page-muted); }
 
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
@@ -166,6 +170,30 @@
     <p class="fit">[Kime uyar, maliyeti ne.]</p>
   </section>
 </main>
+
+<!-- Landing pages only: the page plan from references/high-end.md §1. Delete for panel-only boards. -->
+<section class="improvements plan" aria-labelledby="plan-title">
+  <h2 id="plan-title">Sayfa kurgusu</h2>
+  <p>[5–8 sahne. Yan yana iki sahne aynı düzende değil; her biri ziyaretçinin bir sorusuna cevap veriyor.]</p>
+  <ol class="scenes">
+    <li><b>[01 · Sahne adı]</b><span>[Ziyaretçinin sorusu]</span><span>[Düzen: tam ekran görsel / harita / liste + önizleme…]</span><span>[Ne hareket ediyor · hangi gerçek veri]</span></li>
+    <li><b>[02 · Sahne adı]</b><span>[Soru]</span><span>[Düzen]</span><span>[Hareket · veri]</span></li>
+    <li><b>[03 · Sahne adı]</b><span>[Soru]</span><span>[Düzen]</span><span>[Hareket · veri]</span></li>
+    <li><b>[04 · Sahne adı]</b><span>[Soru]</span><span>[Düzen]</span><span>[Hareket · veri]</span></li>
+    <li><b>[05 · Sahne adı]</b><span>[Soru]</span><span>[Düzen]</span><span>[Hareket · veri]</span></li>
+  </ol>
+</section>
+
+<!-- Landing pages only: the signature moment, high-end.md §1b. Three stills, each strong without motion. -->
+<section class="improvements plan" aria-labelledby="moment-title">
+  <h2 id="moment-title">İmza anı · [hangi sahne]</h2>
+  <p>[Ne tetikliyor: kaydırma / imleç / zaman. Telefonda nasıl.]</p>
+  <ol class="scenes frames">
+    <li><b>Kare 0 · giriş</b><span>[Ekranda zaten ne var (asla boş değil)]</span><!-- [mini SVG/HTML still] --></li>
+    <li><b>Kare 1 · değişim</b><span>[Neyi açıklayan değişim]</span><!-- [still] --></li>
+    <li><b>Kare 2 · sonuç</b><span>[Akılda kalacak gerçek sayı / olgu]</span><!-- [still] --></li>
+  </ol>
+</section>
 
 <section class="improvements" aria-labelledby="imp-title">
   <h2 id="imp-title">Bu projede önerdiklerim</h2>

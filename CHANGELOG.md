@@ -1,5 +1,77 @@
 # Değişiklik günlüğü
 
+## Yayınlanmadı
+
+- **Kendini tekrar etme sorunu:** SKILL.md her landing için sabit bir bölüm
+  sırası veriyordu (hero → entegrasyonlar → akış → sabitlenen adımlar →
+  bento → hesaplayıcı → fiyat → SSS carousel → CTA → footer'da dev yazı);
+  brief şablonu ve animasyon kataloğu da aynı listeyi öneriyordu. Bu yüzden
+  her sayfa aynı iskelette ve aynı footer'la çıkıyordu. Sabit sıra kaldırıldı;
+  yerine ürünün hikâyesinden çıkan bir sahne planı geldi. Footer'daki dev
+  yazı artık varsayılan değil, yalnızca marka adı yönün fikriyse
+  kullanılıyor.
+- **Sayfa hareketleri hafızada:** `learn.py build` kullanılan sahne planını
+  ve hareketleri (footer-wordmark, pinned-steps, carousel…) kaydediyor;
+  `recall` son projelerde 2+ kez kullanılanları "varsayılan olarak kapalı"
+  diye listeliyor.
+- **Üst düzey tasarım rehberi:** yeni `references/high-end.md`, ajans
+  seviyesindeki bir siteyi (teknokent tanıtım sitesi) inceleyerek yazıldı:
+  sahneler (5–8, yan yana iki sahne aynı düzende değil, uzun hikâyeler
+  sabitlenen dizilerle), marka şeklinin grafik sistem olması, gerçek
+  fotoğraf ve ürüne özel görseller, gerçek verinin keşfedilebilir
+  görselleştirmesi (kat planı, harita), arayüz detayları, tipografik
+  kontrast, scroll'a bağlı koreografi. 8 maddelik seviye kontrolü (16
+  üzerinden 12 altı gösterilmiyor). Öneri panosuna "Sayfa kurgusu" eklendi.
+- **Bileşen kapsamı:** "sadece inputlar", "butonlar", "tablolar" gibi
+  istekler artık skill'in içinde. Yeni `references/component-craft.md`
+  (kapsam kuralları, durum matrisi, türce farklı varyantlar, input / select
+  / checkbox / buton / tablo tarifleri, Türkçe formatlar) ve
+  `assets/component-board.html`. Bu kapsamda bölüm, footer ya da sayfa
+  düzeni değişmiyor; bileşen merkezden (ortak bileşen ya da tema) değişiyor.
+- **Eval:** (1) "Sadece inputları premium yap": skill projeye dokunmadan 9
+  alanı buldu, mevcut slate renkleriyle türce farklı üç varyant (çerçeve +
+  halka, dolgulu + parıltı, etiket solda grup kartı) ve tüm durumları açık
+  ve koyu gösterdi; uygulama planı ortak bileşen ve tema üzerinden, sayfa
+  düzeni değişmeden. Gerçek bir hata da yakaladı: `--input` ve `--ring`
+  tanımsız olduğu için inputlar varsayılan griye düşüyordu. (2) Hafızasında
+  footer yazısı 6, sabitlenen adımlar 4 kez geçen bir kullanıcıyla "ajans
+  işi landing": 7 sahnelik kurgu, yan yana aynı düzen yok, footer sade
+  (menü, iletişim, yasal), sık kullanılan hareketlerin hiçbiri yok. Seviye
+  kontrolü 14/16; en zayıf madde görseller (projede fotoğraf yok).
+- **Tasarım araştırması sonrası eklemeler** (ödül alan siteler üzerine
+  yazılar, jüri rehberleri ve web platformu güncellemeleri):
+  - `references/motion-engine.md`: GSAP + ScrollTrigger (artık ücretsiz),
+    Lenis, CSS scroll-driven animations ve View Transitions için hangi
+    durumda hangisi; koreografi token'ları (süre, gecikme, üç easing,
+    kişilik), sahne başına tek ana zaman çizelgesi, kaydırma hızına uyum,
+    sayfa ve durum geçişleri, hareket bütçesi.
+  - **İmza anı:** sayfa tek bir unutulmaz an etrafında kuruluyor; kodlamadan
+    önce üç karelik senaryo, her kare tek başına güçlü olmalı. Öneri
+    panosuna eklendi.
+  - `references/art-direction.md`: görsel envanteri, tüm fotoğraflara tek
+    işlem, fotoğraf yoksa kullanıcıya çekim listesi (stok ya da üretilmiş
+    insan yok), gerçek veriden SVG görseller, kinetik ve değişken fontlu
+    tipografi.
+  - `references/copy.md`: başlık kalıpları, yasak klişeler ("geleceği…",
+    "yenilikçi çözümler"), sahne metni düzeni.
+  - `scripts/study.js`: referans siteyi tarayıcıda ölçüyor (sahneler,
+    sabitlenen bölümler, ölçek sıçraması, palet, GSAP/Lenis/CSS scroll
+    timeline, hover sayısı). Nehir Teknokent sitesinde denendi: 8 sahne,
+    3'ü sabitlenmiş, 72/14,5 px (5×), Lenis + ScrollTrigger, 155 hover
+    kuralı.
+  - `references/webgl.md`: isteğe bağlı 3D katmanı; yalnızca fiziksel ürün
+    ya da yer için, cihaz kademeleri, düz HTML yedeği.
+  - Arayüz detayları (imleç, menü, dokunmatik karşılık, sahne geçişi)
+    `high-end.md`'ye eklendi.
+  - `verify.js` performans bloğu: LCP, CLS, sayfa ağırlığı, JS boyutu,
+    yükleme sonrası uzun kareler, DOM boyutu (laboratuvar ölçümü, yalnızca
+    uyarı).
+  - Görsel kontrole üç eleştirmen (sanat yönetmeni, hareket tasarımcısı,
+    erişilebilirlik) ve "yapay zekâ yapmış gibi mi" testi.
+- **`verify.js`:** odak stili kontrolü artık sarmalayıcıdaki `:focus-within`
+  kuralını da sayıyor (stillenmiş alan içindeki input yanlış uyarı
+  veriyordu).
+
 ## 1.2.0
 
 - **Tekdüzeliğe karşı yön bulma yöntemi:** eval'de skill her projede aynı üç

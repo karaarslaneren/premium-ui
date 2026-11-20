@@ -47,13 +47,23 @@ One command each, right when it happens, not reconstructed at the end:
 | Board passed the visual critique and is about to be shown | `learn.py board <board.html> --project <name>` (reads directions, faces, tone and corners from the file) |
 | User picks a direction | `learn.py choice --project <name> --picked B --text "their words, if any"` |
 | User reacts to a design (rejects, "yine çok benzer", "daha profesyonel olsun", praises a part) | `learn.py feedback --project <name> --text "their words, short"` |
+| Page plan agreed (landing) | `learn.py build --project <name> --scenes "hero: …; konum: …" --moves pinned-steps,count-up` |
 | Visual critique, `verify.js` or the user finds a problem you made | `learn.py issue --project <name> --kind <slug> --text "one line"` |
 
 Issue slugs, so counts add up across sessions (add a new one only when none
 fits): `ghost-button`, `low-contrast`, `empty-first-frame`, `label-wrap`,
 `overflow`, `clipped-text`, `glyph-fallback`, `layout-animation`,
 `js-hidden-content`, `reduced-motion`, `hit-area`, `invented-claim`,
-`reference-copy`, `same-look`.
+`reference-copy`, `same-look`, `low-level` (the level check in
+`high-end.md` scored under 12).
+
+Move slugs for `build`, so repeats show up across projects:
+`footer-wordmark`, `pinned-steps`, `horizontal-gallery`, `stacked-cards`,
+`count-up`, `marquee`, `bento`, `carousel`, `plan-finder`, `calculator`,
+`svg-flow`, `map`, `floor-plan`, `line-mask`, `magnetic-button`,
+`glow-card`, `preloader`, `smooth-scroll`, `image-converge`, `custom-cursor`,
+`scroll-scrub`, `view-transition`, `split-lines`, `kinetic-type`,
+`variable-font`, `webgl-scene`, `duotone`, `brand-mask`.
 
 Log the user's words as they said them; don't log secrets, customer data or
 anything from `.env`.

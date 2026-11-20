@@ -12,16 +12,15 @@ Tasarım yönü:
 - Görünüm: [varsa: marka renkleri, logo, beğenilen/beğenilmeyen siteler; yoksa "ürünün dünyasından türet"].
 
 Animasyonlar ürünün kendisini anlatsın, süs olmasın:
-- Hero: [ör. bir ürün pazaryerlerine dağılsın, fiyatlar count-up ile hesaplansın].
-- Akış: [ör. sipariş X'ten merkeze, oradan mağazaya SVG path üzerinde paket olarak gitsin].
-- Nasıl çalışır: scroll-pinned scrollytelling; bölüm sabit kalsın, adımlar yerinde kaysın.
-- Fiyatlar: plan önerici (kaydırıcı → sliding highlight), yıllıkta tasarruf count-up.
-- SSS: yatay scroll-snap carousel. Footer: giant wordmark reveal.
-- Panel: landing ile aynı tasarım dili, gerçek verili genel bakış, kurulum listesi.
+- Kapsam: [tüm sayfa | panel | tek bölüm | tek bileşen ailesi, ör. "sadece inputlar"].
+- Mutlaka anlatılsın: [ürünün göstermek istediğiniz 2–3 gerçeği, ör. "sipariş pazaryerinden mağazaya nasıl gidiyor"].
+- Elimizde olan görseller: [fotoğraflar, logo, ürün ekran görüntüleri; yoksa "yok"].
+- İstemediklerim: [ör. "footer'a dev yazı", "kart ızgarası", "koyu tema"].
+- Panel: [varsa: landing ile aynı tasarım dili, gerçek verili genel bakış].
 - Genel: [istenen hareket karakteri, ör. sakin / mekanik / oyuncu].
 
 Kısıtlar:
-- Stack: [ör. Laravel Blade + Tailwind v4 + Livewire + vanilla JS]. Yeni bağımlılık ekleme.
+- Stack: [ör. Laravel Blade + Tailwind v4 + Livewire + vanilla JS]. Yeni bağımlılık: [izin yok | GSAP/Lenis olabilir | 3D olabilir].
 - Sadece transform/opacity animasyonu; prefers-reduced-motion'a uy; mobilde yatay taşma olmasın.
 - Rakamlar ve iddialar gerçek veriden/config'den gelsin, uydurma olmasın.
 

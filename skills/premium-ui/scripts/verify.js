@@ -6,7 +6,8 @@
 // Deterministic checks: horizontal overflow, small hit areas, text contrast
 // (WCAG AA), infinite animations under reduced motion, non-composited
 // animated properties, images without alt / size, fonts without swap,
-// document basics. Heuristic: focus styles (confirm with the Tab key).
+// document basics, performance (LCP, CLS, weight, long frames; lab numbers, warn only).
+// Heuristic: focus styles (confirm with the Tab key).
 (() => {
   const MAX = 12; // items listed per check
   if (!innerWidth || !innerHeight || document.visibilityState === 'hidden') {
@@ -189,9 +190,15 @@
     const snap = (el) => { const cs = getComputedStyle(el); return [cs.outlineStyle, cs.outlineWidth, cs.outlineColor, cs.boxShadow, cs.borderColor, cs.backgroundColor, cs.textDecorationLine].join('|'); };
     // Selectors of authored :focus / :focus-visible rules, with the pseudo-class stripped,
     // so an element that has such a rule counts even if programmatic focus doesn't apply it.
+    // A :focus-within rule on a wrapper (input inside a styled field) also counts for its descendants.
     const focusSelectors = [];
-    walkRules((r) => { if (r.selectorText?.includes(':focus')) r.selectorText.split(',').filter((s) => s.includes(':focus')).forEach((s) => focusSelectors.push(s.replace(/:focus(-visible|-within)?/g, '').trim() || '*')); });
-    const hasRule = (el) => focusSelectors.some((s) => { try { return el.matches(s); } catch { return false; } });
+    const withinSelectors = [];
+    walkRules((r) => { if (r.selectorText?.includes(':focus')) r.selectorText.split(',').filter((s) => s.includes(':focus')).forEach((s) => {
+      const bare = s.replace(/:focus(-visible|-within)?/g, '').trim() || '*';
+      (/:focus-within\s*$/.test(s.trim()) ? withinSelectors : focusSelectors).push(bare);
+    }); });
+    const hasRule = (el) => focusSelectors.some((s) => { try { return el.matches(s); } catch { return false; } })
+      || withinSelectors.some((s) => { try { return !!el.closest(s); } catch { return false; } });
     for (const el of focusables.slice(0, 40)) {
       const before = snap(el);
       el.focus({ preventScroll: true, focusVisible: true });
@@ -236,6 +243,31 @@
     add('lazyAboveFold', lazyAbove.length ? 'warn' : 'pass', lazyAbove.map((i) => i.currentSrc || i.src), 'above-the-fold (likely LCP) images should not be loading="lazy"');
     const fonts = [...document.fonts].filter((f) => f.status === 'loaded' && !['swap', 'optional', 'fallback'].includes(f.display));
     add('fontDisplay', fonts.length ? 'warn' : 'pass', fonts.map((f) => `${f.family} ${f.weight} display=${f.display}`), 'use font-display: swap (Google Fonts: &display=swap)');
+  }
+
+  // 6b. Performance (lab numbers from this load; warn only — confirm at 4× CPU slowdown in DevTools)
+  {
+    const take = (type) => { try { const o = new PerformanceObserver(() => {}); o.observe({ type, buffered: true }); const r = o.takeRecords(); o.disconnect(); return r; } catch { return []; } };
+    const lcpE = take('largest-contentful-paint').at(-1);
+    const cls = take('layout-shift').filter((e) => !e.hadRecentInput).reduce((s, e) => s + e.value, 0);
+    const res = performance.getEntriesByType('resource');
+    const kb = (f) => Math.round(res.filter(f).reduce((s, e) => s + (e.transferSize || e.encodedBodySize || 0), 0) / 1024);
+    const nav = performance.getEntriesByType('navigation')[0];
+    // long frames after load only: parsing and first render are covered by LCP
+    const loaf = take('long-animation-frame').filter((e) => e.duration > 50 && e.startTime > (nav?.loadEventEnd || 0));
+    const total = kb(() => true) + Math.round((nav?.transferSize || 0) / 1024);
+    const js = kb((e) => e.initiatorType === 'script' || /\.m?js(\?|$)/.test(e.name));
+    const img = kb((e) => e.initiatorType === 'img' || /\.(avif|webp|jpe?g|png|gif|svg)(\?|$)/.test(e.name));
+    const font = kb((e) => /\.(woff2?|ttf|otf)(\?|$)/.test(e.name));
+    const items = [];
+    if (lcpE && lcpE.startTime > 2500) items.push(`LCP ${Math.round(lcpE.startTime)} ms (${sel(lcpE.element)}) > 2500`);
+    if (cls > 0.05) items.push(`CLS ${cls.toFixed(3)} > 0.05`);
+    if (total > 3072) items.push(`page weight ${total} kB > 3 MB`);
+    if (js > 500) items.push(`JS ${js} kB > 500 kB`);
+    if (loaf.length) items.push(`${loaf.length} long animation frames > 50 ms (longest ${Math.round(Math.max(...loaf.map((e) => e.duration)))} ms)`);
+    if (document.querySelectorAll('*').length > 3000) items.push(`${document.querySelectorAll('*').length} DOM nodes > 3000`);
+    add('performance', items.length ? 'warn' : 'pass', items,
+      `lab: LCP ${lcpE ? Math.round(lcpE.startTime) + ' ms' : 'n/a'}, CLS ${cls.toFixed(3)}, weight ${total} kB (JS ${js}, img ${img}, fonts ${font}); cross-origin sizes may read 0. Scroll the page at 4× CPU slowdown before trusting it.`);
   }
 
   // 7. Document basics

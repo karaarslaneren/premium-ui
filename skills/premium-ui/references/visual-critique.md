@@ -43,6 +43,33 @@ section:
    does it only live in the description text?
 6. **Mobile.** Columns stack cleanly, buttons aren't cramped, the headline
    fits, nothing scrolls sideways.
+7. **Level.** For a landing page or its plan: the level check in
+   `high-end.md` (8 rows, 0–2 each). Under 12 of 16 → fix the lowest rows
+   first. For a component: is every state in the matrix designed, in light
+   and dark (`component-craft.md`)?
+
+## 2b. Three critics (landing pages and boards)
+
+After the six questions, read the same screenshots three more times, each
+time as one person, and write their single harshest note:
+
+- **Art director:** Does it have a point of view? Is there one idea,
+  carried by the motif, the pictures and the type, or a collection of
+  tasteful parts? Which element would they cut?
+- **Motion designer:** Which scene is the signature moment, and are its
+  three frames (`high-end.md` §1b) strong as stills? Does anything move
+  without explaining something? Do scenes hand over or hard-cut?
+- **Accessibility reviewer:** Reduced motion, keyboard path through pinned
+  scenes and menus, text over images, focus on custom controls.
+
+Then the **AI tell test**: would a designer looking at this guess within
+five seconds that a model made it? Common tells: centred hero + three
+cards, purple/blue gradient, glassmorphism on everything, emoji icons,
+generic "Geleceği…" headlines, identical section rhythm, a giant footer
+wordmark, stock-like illustrations. Name each tell you find and remove it.
+
+For a build in a real browser, also scroll once at 4× CPU slowdown and
+read `verify.js` → `performance`.
 
 ## 3. Fix, re-shoot, report
 

@@ -226,6 +226,10 @@ release). Mark the nearest card `is-current` and lift it slightly.
 
 ## Giant wordmark footer
 
+Overused by this skill: not a default. Only when the brand name itself is
+the direction's idea and `recall` doesn't list it as a recent move (see
+`high-end.md`, "The footer is not a signature").
+
 Brand name at ~22vw, `leading-[.78]`, cropped by `overflow:hidden`. Letters
 rise in with stagger when the footer enters; text fill is a radial gradient
 clipped to text whose centre follows the pointer.

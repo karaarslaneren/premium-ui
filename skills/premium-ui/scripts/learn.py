@@ -7,6 +7,7 @@ Usage:
     python3 learn.py choice --project NAME --picked B [--text "user's words"]
     python3 learn.py feedback --project NAME --text "user's words"
     python3 learn.py issue --project NAME --kind ghost-button [--text "..."]
+    python3 learn.py build --project NAME --scenes "hero: …; map: …" --moves pinned-steps,count-up
     python3 learn.py lesson "One line: what to do differently, and why"
     python3 learn.py share [--send | --never] [--all]
 
@@ -157,6 +158,16 @@ def cmd_board(a):
     print(f"logged board for {a.project} ({len(e['dirs'])} directions, fonts: {', '.join(e['fonts'])})")
 
 
+def slugs(text):
+    return [re.sub(r"[^a-z0-9]+", "-", m.lower()).strip("-") for m in re.split(r"[,\s]+", text or "") if m.strip()]
+
+
+def cmd_build(a):
+    moves = slugs(a.moves)
+    append({"type": "build", "project": a.project, "scenes": a.scenes, "moves": moves})
+    print(f"logged page plan for {a.project}: {len(moves)} moves ({', '.join(moves) or '-'})")
+
+
 def cmd_choice(a):
     append({"type": "choice", "project": a.project, "picked": a.picked, "text": a.text})
     print(f"logged choice {a.picked} for {a.project}")
@@ -224,6 +235,8 @@ def cmd_recall(a):
                     print(f"- {e['ts'][:10]} feedback: \"{e['text']}\"")
                 elif e["type"] == "issue":
                     print(f"- {e['ts'][:10]} issue {e['kind']}" + (f": {e['text']}" if e.get("text") else ""))
+                elif e["type"] == "build":
+                    print(f"- {e['ts'][:10]} page plan: {e.get('scenes') or '-'} | moves: {', '.join(e.get('moves') or []) or '-'}")
             if any(e["type"] == "board" for e in mine):
                 print("\nA board was already shown here: a new one must not reuse its metaphors or faces.")
             print()
@@ -238,6 +251,14 @@ def cmd_recall(a):
         corners = collections.Counter(d["corners"] for b in recent for d in b["dirs"] if d.get("corners"))
         print("Spread: " + ", ".join(f"{k} {v}" for k, v in (tones + corners).most_common()))
         print("Prefer faces and metaphors not listed here; at most one listed face per new board.\n")
+
+    builds = [e for e in events if e.get("type") == "build"][-a.boards:]
+    if builds:
+        moves = collections.Counter(m for b in builds for m in dict.fromkeys(b.get("moves") or []))
+        print(f"## Recent page moves ({len(builds)} page plans, all projects)\n")
+        print(", ".join(f"{m} ({n})" if n > 1 else m for m, n in moves.most_common()))
+        print("Don't reach for a listed move again without a reason specific to this product; "
+              "anything used 2+ times is off by default.\n")
 
     if choices:
         picked = collections.Counter()
@@ -431,6 +452,8 @@ def main(argv):
     f = sub.add_parser("feedback"); f.add_argument("--project", required=True); f.add_argument("--text", required=True)
     i = sub.add_parser("issue"); i.add_argument("--project", required=True); i.add_argument("--kind", required=True); i.add_argument("--text")
     l = sub.add_parser("lesson"); l.add_argument("text")
+    bd = sub.add_parser("build"); bd.add_argument("--project", required=True); bd.add_argument("--scenes", default="")
+    bd.add_argument("--moves", default="", help="comma-separated: footer-wordmark, pinned-steps, horizontal-gallery, count-up…")
     s = sub.add_parser("share"); s.add_argument("--send", action="store_true"); s.add_argument("--never", action="store_true")
     s.add_argument("--all", action="store_true", help="include what was already shared")
     a = p.parse_args(argv)
@@ -438,7 +461,7 @@ def main(argv):
         print("premium-ui memory is off (PREMIUM_UI_MEMORY); nothing read or written.")
         return
     {"recall": cmd_recall, "board": cmd_board, "choice": cmd_choice, "feedback": cmd_feedback,
-     "issue": cmd_issue, "lesson": cmd_lesson, "share": cmd_share}[a.cmd](a)
+     "issue": cmd_issue, "lesson": cmd_lesson, "share": cmd_share, "build": cmd_build}[a.cmd](a)
 
 
 if __name__ == "__main__":

@@ -34,6 +34,17 @@ For each direction:
 | Panel ideas | 3 bullets: shell, dashboard, one list/detail page |
 | Risk / fit | who it suits, what it costs (effort, readability) |
 
+For a landing page, add the **page plan** under the directions: the
+5–8 scenes from `high-end.md` §1, each as one card (the visitor's question,
+composition, what moves, real data). The plan is shared by the directions;
+it shows the user the page will be composed, not stacked. Check it against
+`recall`'s recent page moves; nothing listed there by default, and no
+footer wordmark unless the brand name is the idea.
+
+Below the plan, the **signature moment** storyboard (`high-end.md` §1b):
+three small stills of the one moment the page is built around, each with a
+line of what it shows. Draw them (SVG/HTML), don't only describe them.
+
 Then a short, separate **"Bu projede önerdiklerim"** list: 4–8 concrete
 improvements independent of direction (e.g. "Dashboard yer tutucu kutulardan
 oluşuyor → gerçek verili genel bakış", "Ayarlar İngilizce → Türkçe",
@@ -71,7 +82,8 @@ not a style. Nothing in it is a suggestion. When filling it:
   signature animations should differ in kind, not only in colour.
 - Use real numbers from the project in the stat tile and list row.
 
-Then look at it before the user does: run `visual-critique.md` on the
+Then look at it before the user does: score the page plan with the level
+check in `high-end.md` (improve until 12/16), run `visual-critique.md` on the
 board (with a browser tool, or `python3 scripts/snapshot.py <board.html>`
 without one), fix what it finds, log the board (`python3 scripts/learn.py board
 <board.html> --project <name>`, and an `issue` for each problem the critique

@@ -39,21 +39,33 @@ hedefler:
 
 1. **Hatırlar.** Önceki oturumlarda öğrendiği kuralları, kullanılmış font ve
    metaforları, bu projede daha önce gösterilenleri okur.
-2. **Projeyi inceler.** Stack'i tespit eder (Laravel/Livewire, React/Next,
+2. **Kapsamı belirler.** Tüm sayfa mı, panel mi, tek bölüm mü, yoksa tek
+   bir bileşen ailesi mi (yalnızca inputlar, butonlar, tablolar)? Yalnızca
+   isteneni yapar; istenmeyen bölüm ya da footer eklemez.
+3. **Projeyi inceler.** Stack'i tespit eder (Laravel/Livewire, React/Next,
    Vue/Nuxt…); ürünün ne yaptığını, mevcut ekranları, bileşen kütüphanesini
    ve gerçek rakamları çıkarır.
-3. **Öneri panosu hazırlar.** 2–3 farklı tasarım yönünü tek sayfada canlı
+4. **Öneri panosu hazırlar.** 2–3 farklı tasarım yönünü tek sayfada canlı
    mini tasarımlar olarak gösterir: palet, yazı tipleri, mini giriş bölümü,
-   mini panel ve çalışan imza animasyonu. Yanında projeye özel somut
-   iyileştirme önerilerini listeler.
-4. **Göstermeden önce kontrol eder.** Panonun masaüstü ve mobil ekran
-   görüntüsünü alır, okunurluk ve kırık yerler için inceler, bulduklarını
-   düzeltir.
-5. **Seçilen yönü uygular.** Önce token'lar (renk, tip, şekil, boşluk), sonra
+   mini panel ve çalışan imza animasyonu. Landing için altına **sayfa
+   kurgusunu** ekler: 5–8 sahne, her biri ziyaretçinin bir sorusuna cevap,
+   yan yana iki sahne aynı düzende değil. Bileşen isteklerinde bunun yerine
+   bileşenin 2–3 varyantını tüm durumlarıyla (odak, hata, devre dışı,
+   yükleniyor…) açık ve koyu gösterir.
+5. **Göstermeden önce kontrol eder.** Masaüstü ve mobil ekran görüntüsü,
+   okunurluk ve kırık yerler, sekiz maddelik seviye kontrolü (sahneler,
+   marka motifi, gerçek görseller, gerçek veriden görselleştirme, detaylar,
+   tipografi, hareket, tekrar). 16 üzerinden 12'nin altındaysa göstermeden
+   önce iyileştirir. Ardından sanat yönetmeni, hareket tasarımcısı ve
+   erişilebilirlik gözüyle üç eleştiri ve "bunu yapay zekâ yapmış gibi
+   duruyor mu?" testi.
+6. **Seçilen yönü uygular.** Önce token'lar (renk, tip, şekil, boşluk), sonra
    bölüm bölüm. Her bölüm tarayıcıda masaüstü ve mobilde, açık ve koyu
    modda doğrulanır.
-6. **Öğrenir.** Seçimleri, geri bildirimleri ve bulunan hataları kaydeder;
-   oturum sonunda bunları kalıcı kurallara dönüştürür.
+7. **Öğrenir.** Seçimleri, geri bildirimleri, kullandığı sayfa hareketlerini
+   (footer yazısı, sabitlenen adımlar, carousel…) ve bulunan hataları
+   kaydeder. Son projelerde kullandığı hareketi gerekçe olmadan tekrar
+   kullanmaz; oturum sonunda öğrendiklerini kalıcı kurallara dönüştürür.
 
 ## Kurulum
 
@@ -141,6 +153,10 @@ Dashboard yer tutucu kutulardan oluşuyor, gerçek verilerle profesyonel bir gen
 ```
 
 ```text
+Projedeki form inputları çok sıradan, sadece inputları premium yap.
+```
+
+```text
 Şu sitenin hissini seviyorum: https://… Bizim ürüne uygun bir şey öner, kopyalama.
 ```
 
@@ -150,7 +166,7 @@ yeterli. Ayrıntılı bir brief vermek isterseniz
 [`prompt-template.md`](skills/premium-ui/references/prompt-template.md)
 şablonunu doldurun.
 
-**Kullanılmadığı durumlar:** tek bir küçük düzeltme (bir buton rengi, bir
+**Kullanılmadığı durumlar:** tek bir değer düzeltmesi (bir renk, bir
 boşluk), backend işleri, logo ve görsel üretimi, sunumlar ve tek başına
 grafikler.
 
@@ -200,13 +216,21 @@ ulaşabilir:
 | [`motion-catalog.md`](skills/premium-ui/references/motion-catalog.md) | Animasyon teknikleri ve hazır kodları: scroll reveal, line mask, count-up, SVG akış, sabitlenen bölüm, magnetic buton, glow kart, plan önerici, carousel |
 | [`panel-patterns.md`](skills/premium-ui/references/panel-patterns.md) | Panel çerçevesi, bileşen kütüphanesini merkezden temalama, gerçek verili dashboard, giriş ekranları, dil ayarları |
 | [`craft-baseline.md`](skills/premium-ui/references/craft-baseline.md) | Tip ve boşluk ölçekleri, erişilebilirlik, performans bütçesi, metin, yükleniyor/boş/hata durumları |
+| [`high-end.md`](skills/premium-ui/references/high-end.md) | Üst düzey bir sitenin farkı: sahne kurgusu, marka motifi, gerçek görseller, gerçek veriden etkileşimli görselleştirme, detaylar, koreografi; seviye kontrolü |
+| [`motion-engine.md`](skills/premium-ui/references/motion-engine.md) | Kaydırmaya bağlı, koreografili hareket: GSAP + ScrollTrigger, CSS scroll timeline, View Transitions ile sayfa geçişleri, koreografi token'ları, hareket bütçesi |
+| [`art-direction.md`](skills/premium-ui/references/art-direction.md) | Görsel envanteri, tüm fotoğraflara tek işlem (grade, duotone, grain, marka maskesi), fotoğraf yoksa çekim listesi, gerçek veriden SVG görseller, görsel olarak tipografi |
+| [`copy.md`](skills/premium-ui/references/copy.md) | Tasarımı taşıyan başlıklar: kalıplar, yasak klişeler, sahne metni düzeni |
+| [`webgl.md`](skills/premium-ui/references/webgl.md) | İsteğe bağlı 3D katmanı: ne zaman değer, three.js, cihaz kademeleri, yedek |
+| [`component-craft.md`](skills/premium-ui/references/component-craft.md) | Tek bileşen ailesi istendiğinde: kapsam kuralları, durum matrisi, varyantlar; input, select, checkbox, buton, tablo tarifleri |
 | [`visual-critique.md`](skills/premium-ui/references/visual-critique.md) | Panoyu ve her bölümü kullanıcıdan önce görmek: ekran görüntüsü, altı soru, düzelt ve tekrar çek |
 | [`learning.md`](skills/premium-ui/references/learning.md) | Oturumlar arası hafıza: neyin hatırlanacağı, ne zaman kaydedileceği, kuralların nasıl çıkarılacağı |
 | [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış, stack'ten bağımsız hatalar ve çözümleri |
 | [`stacks/`](skills/premium-ui/references/stacks/) | Stack'e özel tarifler ve hatalar: [Laravel/Livewire/Flux](skills/premium-ui/references/stacks/laravel-livewire.md), [React/Next/shadcn](skills/premium-ui/references/stacks/react-next.md), [Vue/Nuxt](skills/premium-ui/references/stacks/vue-nuxt.md) |
 | [`prompt-template.md`](skills/premium-ui/references/prompt-template.md) | Doldurulacak istek şablonu |
-| [`assets/proposal-board.html`](skills/premium-ui/assets/proposal-board.html) | Öneri panosu şablonu: 3 yön, mini giriş bölümü ve panel, CSS animasyonu |
+| [`assets/proposal-board.html`](skills/premium-ui/assets/proposal-board.html) | Öneri panosu şablonu: 3 yön, mini giriş bölümü ve panel, CSS animasyonu, sayfa kurgusu |
+| [`assets/component-board.html`](skills/premium-ui/assets/component-board.html) | Bileşen panosu şablonu: varyantlar × durumlar, açık ve koyu |
 | [`scripts/verify.js`](skills/premium-ui/scripts/verify.js) | Tarayıcıda çalışan denetim: yatay taşma, tıklama alanı, kontrast, odak, reduced-motion, görsel ve font kontrolleri (JSON rapor) |
+| [`scripts/study.js`](skills/premium-ui/scripts/study.js) | Referans siteyi ölçer: sahneler, sabitlenen bölümler, tip ölçeği, palet, hareket kütüphaneleri, detaylar |
 | [`scripts/snapshot.py`](skills/premium-ui/scripts/snapshot.py) | Tarayıcı aracı yokken makinedeki Chrome ile masaüstü ve mobil ekran görüntüsü alır, `verify.js` raporunu verir |
 | [`scripts/check-fonts.py`](skills/premium-ui/scripts/check-fonts.py) | Seçilen Google Fonts yazı tiplerinde Türkçe karakterlerin (ğ ş ı İ…) gerçekten olup olmadığını kontrol eder |
 | [`scripts/learn.py`](skills/premium-ui/scripts/learn.py) | Hafıza: başta `recall`, oturum sırasında `board` / `choice` / `feedback` / `issue`, sonda `lesson`; `share` ile onaylı, anonim paylaşım |

@@ -1,6 +1,6 @@
 ---
 name: premium-ui
-description: Designs premium, product-specific interfaces with purposeful motion — landing pages AND app panels/dashboards/admin screens — inside an existing project. First studies the codebase (product, real prices/limits, stack) and proposes 2–3 design directions as live mini-designs plus concrete improvement suggestions, then builds the chosen one and audits it in a browser. Use whenever the user wants a whole page, section set or panel to look and move better — "premium", "profesyonel", "animasyonlu", "şık", "modern", "yeniden tasarla", a landing/tanıtım sayfası, a dashboard or panel redesign — or points at a reference site and says "bu tarzda" / "like this", even if they don't say "design". Do NOT use it for a single small tweak (one button colour, one spacing fix, a typo), pure backend work, generating images/logos/brand kits, slide decks, or charts on their own — handle those directly or with the matching skill.
+description: Designs premium, product-specific interfaces with purposeful motion — landing pages AND app panels/dashboards/admin screens — inside an existing project. First studies the codebase (product, real prices/limits, stack) and proposes 2–3 design directions as live mini-designs plus concrete improvement suggestions, then builds the chosen one and audits it in a browser. Also handles one component family across the project ("sadece inputlar", "butonları premium yap", "tablo tasarımı") with variants and full state coverage. Use whenever the user wants a whole page, section set, panel or component family to look and move better — "premium", "profesyonel", "animasyonlu", "şık", "modern", "yeniden tasarla", a landing/tanıtım sayfası, a dashboard or panel redesign — or points at a reference site and says "bu tarzda" / "like this", even if they don't say "design". Do NOT use it for a one-value tweak (one colour, one spacing fix, a typo), pure backend work, generating images/logos/brand kits, slide decks, or charts on their own — handle those directly or with the matching skill.
 ---
 
 # Premium UI
@@ -13,8 +13,14 @@ Reference files (read the one the task needs, not all):
 
 - `references/direction-finding.md` — how to derive directions from the product's world so every project doesn't get the same look. Read before any proposal or "you choose".
 - `references/type-library.md` — faces grouped by genre with character notes, all checked for Turkish glyphs. Pick faces from here, not from memory.
+- `references/high-end.md` — the bar: scenes instead of stacked sections, the brand shape as a system, real pictures, explorable real data, chrome, choreographed motion, and the level check. Read before planning or reviewing a landing page.
+- `references/component-craft.md` — when the request is one component family (inputs, buttons, tables…): scope rules, state matrix, variants, recipes.
 - `references/proposal-board.md` — how to propose 2–3 directions with live mini-designs before building.
-- `references/motion-catalog.md` — every animation technique, with when to use it and drop-in code.
+- `references/motion-catalog.md` — single animation techniques, with when to use them and drop-in code.
+- `references/motion-engine.md` — scroll-linked, choreographed motion: choosing GSAP/ScrollTrigger, CSS scroll timelines or View Transitions, choreography tokens, master timelines, page transitions, motion budget.
+- `references/art-direction.md` — image inventory and one treatment for all photos, shot lists when there are none, visuals drawn from real data, type as image.
+- `references/copy.md` — headlines and scene text that carry the design; patterns, banned phrases.
+- `references/webgl.md` — the optional 3D tier: when it earns its place, stack, device tiers, fallback.
 - `references/panel-patterns.md` — app shell, dashboard, tables, forms, empty states, theming a component library.
 - `references/craft-baseline.md` — type/spacing scales, accessibility, performance budget, copy, loading/empty/error states.
 - `references/visual-critique.md` — how to look at the board and each built section (screenshots, six questions, fix and re-shoot) before the user sees it.
@@ -28,7 +34,9 @@ Reference files (read the one the task needs, not all):
 Bundled files:
 
 - `assets/proposal-board.html` — the proposal board template (step 0).
-- `scripts/verify.js` — the page audit run in step 6.
+- `assets/component-board.html` — the component board template: variants × states, light and dark (component scope).
+- `scripts/verify.js` — the page audit run in step 6 (now with lab performance: LCP, CLS, weight, long frames).
+- `scripts/study.js` — measures a reference site (scenes, type scale, palette, motion stack, chrome) in the browser; step 2.
 - `scripts/snapshot.py` — when there is no browser tool: headless Chrome screenshots (desktop, mobile) of a local HTML file plus the `verify.js` report.
 - `scripts/learn.py` — the memory: `recall` at the start, `board` / `choice` / `feedback` / `issue` as they happen, `lesson` at the end, `share` (opt-in) to send anonymous lessons to the skill's repo. Stored in `~/.claude/premium-ui/`, outside the plugin.
 - `scripts/check-fonts.py` — checks that Google Fonts families exist and contain the needed glyphs (default ğĞşŞıİçÇöÖüÜ). Run it on every face before it goes on a board.
@@ -38,6 +46,20 @@ Bundled files:
 Before anything else, run `python3 scripts/learn.py recall --project <name>`
 and apply what it returns (`references/learning.md` §1): lessons, faces and
 metaphors to avoid, this project's earlier boards and the user's words.
+
+### Scope first
+
+Decide what was asked, and do only that:
+
+| Request | Scope | Path |
+| --- | --- | --- |
+| "landing", "tanıtım sayfası", "siteyi yeniden tasarla" | whole page(s) | steps 0–7 |
+| "panel", "dashboard" | app screens | steps 0–7, `panel-patterns.md` |
+| "şu bölüm", "hero'yu" | one section | skip the board unless no direction exists; build that section only |
+| "inputlar", "butonlar", "form alanları", "tablolar" | one component family | `component-craft.md` + component board; no sections, no footer, no layout changes |
+
+Never add sections, a footer treatment or page chrome the scope didn't ask
+for. Mention extra ideas in one line at the end instead.
 
 ### 0. Propose before you build
 
@@ -70,8 +92,10 @@ indirim" only if the config or the user says so. Read them from config/DB, or le
 
 ### 2. Handle the reference correctly
 
-When the user gives a reference site: study its *quality* (motion timing,
-restraint, typographic confidence), not its *costume*. Do not copy its palette,
+When the user gives a reference site: measure it with `scripts/study.js`
+and screenshots (`high-end.md`, "Studying a reference"), then study its
+*quality* (scene rhythm, scale jump, motion timing, restraint), not its
+*costume*. Do not copy its palette,
 fonts, shapes or layout. Users reliably reject a re-skin of the reference
 ("yine çok benzer oldu"). Write one sentence describing what you take from it
 and one describing how this product's look will differ, before coding.
@@ -93,8 +117,9 @@ before any component:
 - Shape: one shape language from the direction (soft, small radius, sharp,
   cut corners, heavy borders…). Apply it everywhere, including buttons and
   inputs.
-- Easing: `--ease: cubic-bezier(.16,1,.3,1)` for reveals,
-  `--spring: cubic-bezier(.34,1.56,.64,1)` for things that land/snap.
+- Motion: the choreography tokens from `motion-engine.md` §2 (durations,
+  stagger, three easings) and one word for the personality (calm,
+  mechanical, playful). `--ease` / `--spring` in the catalog are aliases.
 - Scales: type, spacing and elevation from `craft-baseline.md` §1 — set them
   as tokens too, so no component invents its own sizes.
 
@@ -108,11 +133,14 @@ page — see `panel-patterns.md`.
 
 ### 4. Build section by section
 
-Landing page, typical order (adapt to the product):
-hero (product truth animated) → integrations/logos with status → flow
-explainer → how it works (scroll-pinned) → features bento with
-micro-interactions → interactive tool (calculator / plan finder) → pricing →
-FAQ carousel → CTA → footer wordmark.
+Landing page: there is no standard section order. Write the **scene
+plan** from `high-end.md` §1 first (5–8 scenes, the visitor's question each
+answers, composition, what moves, real data), with no two adjacent scenes
+alike and nothing from `recall`'s recently used moves without a reason.
+Pricing, FAQ, logos, a carousel, a calculator or a big footer wordmark are
+options for a specific need, never defaults. The footer is navigation,
+contact and legal; see `high-end.md` "The footer is not a signature".
+Log the plan with `learn.py build` once it's agreed (`learning.md` §2).
 
 Panel: shell (sidebar on background, page as a raised sheet) → overview
 dashboard with real data → list/detail pages inherit from the theme.
@@ -126,6 +154,11 @@ delivering everything at once. Feedback like "burası daha profesyonel olabilir"
 is about that section only — redo it, keep what they liked.
 
 ### 5. Motion rules
+
+Pick the engine with `motion-engine.md` §1 (IntersectionObserver for a few
+reveals; GSAP + ScrollTrigger or CSS scroll timelines for scrubbed, pinned
+scenes; View Transitions between states and pages). Ask before adding a
+dependency. Build the signature moment from its three-frame storyboard.
 
 - Animate only `transform`, `opacity`, `filter`, stroke-dash. Never layout
   properties — that includes the easy-to-miss ones: `grid-template-rows`
