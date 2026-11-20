@@ -1,6 +1,6 @@
 # Değişiklik günlüğü
 
-## Yayınlanmadı
+## 1.3.0
 
 - **Kendini tekrar etme sorunu:** SKILL.md her landing için sabit bir bölüm
   sırası veriyordu (hero → entegrasyonlar → akış → sabitlenen adımlar →
