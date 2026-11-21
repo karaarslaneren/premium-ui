@@ -12,6 +12,10 @@ each built section (SKILL.md step 6).
 
 - **Browser tool available:** screenshot at 1440×900 and at 375–390 wide
   after animations settle, and run `scripts/verify.js` at both sizes.
+- **Scroll-driven pages** (pinned or scrubbed scenes), or a hidden browser
+  pane: `node scripts/scenes.mjs <url> --out DIR` scrolls in real time and
+  captures one 1440×900 frame per screen (`--width 390 --height 844` for
+  mobile). Serve local files over http first.
 - **No browser tool:** `python3 scripts/snapshot.py <page.html>`. It uses
   the Chrome / Chromium / Edge already on the machine (headless), writes
   `snapshots/desktop.png`, `desktop-top.png` and `mobile.png` next to the

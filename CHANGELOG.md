@@ -68,6 +68,19 @@
     uyarı).
   - Görsel kontrole üç eleştirmen (sanat yönetmeni, hareket tasarımcısı,
     erişilebilirlik) ve "yapay zekâ yapmış gibi mi" testi.
+- **Uçtan uca build eval'i:** skill'e "Atölye Moda" (eski matbaada ortak
+  çalışma alanı, düz HTML) tanıtım sitesini baştan yaptırıldı ve gerçek
+  zamanlı kaydırılarak masaüstü ve mobilde incelendi. Yön binanın kendisinden
+  çıktı ("Kesit": beton grisi, kiriş astarı kırmızısı, Archivo'nun genişlik
+  ekseni); logodaki silindir ve kâğıt şeridi tüm sayfada motif; 7 sahne
+  (kesit çiziminde katların gerçek masa/oda sayıları, gün sayısına göre üyelik
+  hesaplayıcı, yürüme dakikalarıyla şematik harita, 24 saatlik çizelge);
+  footer sade. `verify.js` iki genişlikte temiz; seviye kontrolü 15/16 (en
+  zayıf: fotoğraf yok, çekim listesi verildi). Bulunan iki sorun pitfalls'a
+  eklendi: veri taşıyan çubuk/rotalar sahne dururken eksik çiziliyordu
+  (7/24 çubuğu ~7 saat gösteriyordu) ve `snapshot.py`'nin tam sayfa
+  görüntüsü kaydırmaya bağlı sayfaları gösteremiyor. Bunun için
+  `scripts/scenes.mjs` eklendi.
 - **`verify.js`:** odak stili kontrolü artık sarmalayıcıdaki `:focus-within`
   kuralını da sayıyor (stillenmiş alan içindeki input yanlış uyarı
   veriyordu).

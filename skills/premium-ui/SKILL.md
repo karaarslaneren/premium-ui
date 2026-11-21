@@ -36,6 +36,7 @@ Bundled files:
 - `assets/proposal-board.html` — the proposal board template (step 0).
 - `assets/component-board.html` — the component board template: variants × states, light and dark (component scope).
 - `scripts/verify.js` — the page audit run in step 6 (now with lab performance: LCP, CLS, weight, long frames).
+- `scripts/scenes.mjs` — Node + headless Chrome: real-time scrolled screenshots, one viewport per stop, for pinned/scrubbed pages (snapshot.py's full-page shot can't show them).
 - `scripts/study.js` — measures a reference site (scenes, type scale, palette, motion stack, chrome) in the browser; step 2.
 - `scripts/snapshot.py` — when there is no browser tool: headless Chrome screenshots (desktop, mobile) of a local HTML file plus the `verify.js` report.
 - `scripts/learn.py` — the memory: `recall` at the start, `board` / `choice` / `feedback` / `issue` as they happen, `lesson` at the end, `share` (opt-in) to send anonymous lessons to the skill's repo. Stored in `~/.claude/premium-ui/`, outside the plugin.

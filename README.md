@@ -231,6 +231,7 @@ ulaşabilir:
 | [`assets/component-board.html`](skills/premium-ui/assets/component-board.html) | Bileşen panosu şablonu: varyantlar × durumlar, açık ve koyu |
 | [`scripts/verify.js`](skills/premium-ui/scripts/verify.js) | Tarayıcıda çalışan denetim: yatay taşma, tıklama alanı, kontrast, odak, reduced-motion, görsel ve font kontrolleri (JSON rapor) |
 | [`scripts/study.js`](skills/premium-ui/scripts/study.js) | Referans siteyi ölçer: sahneler, sabitlenen bölümler, tip ölçeği, palet, hareket kütüphaneleri, detaylar |
+| [`scripts/scenes.mjs`](skills/premium-ui/scripts/scenes.mjs) | Kaydırmaya bağlı sayfalar için: headless Chrome'da gerçek zamanlı kaydırıp her ekranın görüntüsünü alır (Node 22+) |
 | [`scripts/snapshot.py`](skills/premium-ui/scripts/snapshot.py) | Tarayıcı aracı yokken makinedeki Chrome ile masaüstü ve mobil ekran görüntüsü alır, `verify.js` raporunu verir |
 | [`scripts/check-fonts.py`](skills/premium-ui/scripts/check-fonts.py) | Seçilen Google Fonts yazı tiplerinde Türkçe karakterlerin (ğ ş ı İ…) gerçekten olup olmadığını kontrol eder |
 | [`scripts/learn.py`](skills/premium-ui/scripts/learn.py) | Hafıza: başta `recall`, oturum sırasında `board` / `choice` / `feedback` / `issue`, sonda `lesson`; `share` ile onaylı, anonim paylaşım |
