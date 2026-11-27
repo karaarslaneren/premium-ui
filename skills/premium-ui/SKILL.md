@@ -26,6 +26,8 @@ Reference files (read the one the task needs, not all):
 - `references/visual-critique.md` — how to look at the board and each built section (screenshots, six questions, fix and re-shoot) before the user sees it.
 - `references/learning.md` — the skill's memory across sessions: recall what earlier boards used and what went wrong, log choices and feedback, distil lessons. Read at the start of every session.
 - `references/pitfalls.md` — stack-agnostic mistakes that already happened once; check before shipping.
+- `references/sectors/<sector>.md` — benchmarks of real sites in one sector: the category's default looks to stand apart from, content patterns that worked, conversion rules, legal limits, the domain's raw nouns. Read the matching one during `direction-finding.md` §1 as the "neighbours" map, never as a look to copy:
+  `womens-health.md` (kadın doğum, jinekoloji, tüp bebek, gebelik; also useful for any single-doctor site — 53 sites, Nov 2026).
 - `references/stacks/<stack>.md` — framework-specific recipes and pitfalls. Read **only** the one matching the project:
   `laravel-livewire.md` (Blade, Livewire, Flux), `react-next.md` (React, Next.js, shadcn/ui), `vue-nuxt.md` (Vue, Nuxt, Inertia + Vue).
   For anything else (Svelte, Astro, plain HTML…) apply the generic rules.

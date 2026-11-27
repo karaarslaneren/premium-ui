@@ -1,5 +1,17 @@
 # Değişiklik günlüğü
 
+## Yayımlanmamış
+
+- **Sektör kıyaslamaları:** yeni `references/sectors/` klasörü. İlk dosya
+  `womens-health.md`: 53 canlı kadın doğum, tüp bebek, kadın sağlığı ve
+  premium doktor sitesinin (Kasım 2026) incelenmesinden çıktı. Kategorinin
+  varsayılan görünümleri (kaçınılacak komşular), en iyi sitelerin içerik
+  kalıpları (niyet kartları, ilk muayene adımları, haftalık gebelik takvimi,
+  tek hekim sürekliliği…), mobil/dönüşüm kuralları, Türkiye tanıtım
+  yönetmeliği ve KVKK sınırları, sık hatalar ve `direction-finding.md` için
+  alanın ham nesneleri. `SKILL.md` ve `direction-finding.md` §1 bu klasöre
+  yönlendiriyor.
+
 ## 1.3.0
 
 - **Kendini tekrar etme sorunu:** SKILL.md her landing için sabit bir bölüm

@@ -225,6 +225,7 @@ ulaşabilir:
 | [`visual-critique.md`](skills/premium-ui/references/visual-critique.md) | Panoyu ve her bölümü kullanıcıdan önce görmek: ekran görüntüsü, altı soru, düzelt ve tekrar çek |
 | [`learning.md`](skills/premium-ui/references/learning.md) | Oturumlar arası hafıza: neyin hatırlanacağı, ne zaman kaydedileceği, kuralların nasıl çıkarılacağı |
 | [`pitfalls.md`](skills/premium-ui/references/pitfalls.md) | Gerçekte yaşanmış, stack'ten bağımsız hatalar ve çözümleri |
+| [`sectors/`](skills/premium-ui/references/sectors/) | Sektör kıyaslamaları (gerçek sitelerden): kategorinin klişe görünümleri, işe yarayan içerik kalıpları, dönüşüm kuralları, yasal sınırlar, alanın ham nesneleri — [kadın doğum / doktor siteleri](skills/premium-ui/references/sectors/womens-health.md) (53 site) |
 | [`stacks/`](skills/premium-ui/references/stacks/) | Stack'e özel tarifler ve hatalar: [Laravel/Livewire/Flux](skills/premium-ui/references/stacks/laravel-livewire.md), [React/Next/shadcn](skills/premium-ui/references/stacks/react-next.md), [Vue/Nuxt](skills/premium-ui/references/stacks/vue-nuxt.md) |
 | [`prompt-template.md`](skills/premium-ui/references/prompt-template.md) | Doldurulacak istek şablonu |
 | [`assets/proposal-board.html`](skills/premium-ui/assets/proposal-board.html) | Öneri panosu şablonu: 3 yön, mini giriş bölümü ve panel, CSS animasyonu, sayfa kurgusu |

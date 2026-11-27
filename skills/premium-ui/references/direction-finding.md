@@ -30,7 +30,9 @@ Write these down in a few words each:
   clean break.
 - **What the neighbours look like.** If you know the category's usual look
   (e.g. every competitor is blue-and-white), note it: that is what to stand
-  apart from.
+  apart from. If `references/sectors/` has a file for the domain, read it
+  here: it lists the category's default looks, the patterns that worked
+  and the domain's less obvious nouns, all measured on real sites.
 - **Constraints.** Panels are used for hours (calmer, denser, readable);
   landing pages get seconds (more contrast and character). Accessibility
   (AA contrast) applies to every direction.
